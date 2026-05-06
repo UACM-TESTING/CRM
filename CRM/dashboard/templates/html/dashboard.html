@@ -1,8 +1,6 @@
 {% extends "father.html" %}
 {% load static %}
 
-<!-- este bloque es el que esta en father.html
- y dentro podras ponen contenido personalizado -->
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
@@ -46,7 +44,7 @@
 
 <div class="container mt-3">
     <div class="input-group">
-        <input type="text" class="form-control rounded-pill ps-4" id="searchInput" placeholder="Buscar..." style="border: 2px solid #00f0ff; box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff;">
+        <input type="text" class="form-control rounded-pill ps-4" id="searchInput" placeholder="Buscar número de cuenta..." style="border: 2px solid #00f0ff; box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff;">
         <button class="btn btn-primary rounded-pill ms-2" style="background-color: #6f42c1; border-color: #6f42c1;" onclick="handleSearch()">Buscar</button>
     </div>
 </div>
@@ -56,6 +54,15 @@
     toggle.addEventListener('change', () => {
         document.body.classList.toggle('bg-dark', toggle.checked);
         document.body.classList.toggle('text-white', toggle.checked);
+    });
+
+    // NUEVO: Escuchador de eventos para activar la búsqueda al presionar la tecla "Enter"
+    document.getElementById('searchInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            // Evita que la página intente recargarse si estuviera en un form
+            event.preventDefault(); 
+            handleSearch();
+        }
     });
 
     function handleSearch() {

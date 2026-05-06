@@ -12,6 +12,7 @@ db.sqlite3
 env/
 venv/
 ENV/
+CRM/
 
 # OS generated files
 .DS_Store
