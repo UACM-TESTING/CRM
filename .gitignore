@@ -12,8 +12,13 @@ db.sqlite3
 env/
 venv/
 ENV/
-CRM/
 
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# IGNORAR ARCHIVOS DEL ENTORNO VIRTUAL (Para proteger tu código en la carpeta CRM)
+CRM/lib/
+CRM/bin/
+CRM/include/
+CRM/pyvenv.cfg
