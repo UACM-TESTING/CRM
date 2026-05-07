@@ -5,4 +5,23 @@ from dashboard import db_connection
      encapsulara toda la logica relacionada con el cliente
 """
 class Client:
-     pass
+     
+     #constructor del Client
+     def __init__(self):
+          super.__init__()
+     
+     #metodo para consultar en bd el Client
+     def getClient(self):
+          pass
+     
+     #metodo para insertar en bd el Client
+     def addClient(self):
+          pass
+     
+     #metodo para inhabilitar el Client en base de datos
+     def deleteClient(self):
+          pass
+     
+     #metodo para actualizar en bd el Client
+     def updateClient():
+          pass

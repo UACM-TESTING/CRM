@@ -5,12 +5,23 @@ from dashboard import db_connection
      encapsulara toda la logica relacionada con el plna de servicio
 """
 class Plan:
-     pass
-
-     #consulta un plan en base de datos
-     def getPlan():
+     
+     #constructor de la olt
+     def __init__(self):
           pass
      
-     #actualiza el plan
-     def updatePlan():
+     #metodo para consultar en bd la olt
+     def getPlan(self):
+          pass
+     
+     #metodo para insertar en bd la olt
+     def addPlan(self):
+          pass
+     
+     #metodo para inhabilitar olt en base de datos
+     def deletePlan(self):
+          pass
+     
+     #metodo para actualizar en bd la olt
+     def updatePlan(self):
           pass
