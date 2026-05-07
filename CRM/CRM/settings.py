@@ -1,3 +1,4 @@
+
 """
 Django settings for CRM project.
 
@@ -73,7 +74,7 @@ WSGI_APPLICATION = 'CRM.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sistema_abc',
+        'NAME': 'CRM',
         'USER': 'testing',
         'PASSWORD': '123456',
         'HOST': 'localhost',
