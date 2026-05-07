@@ -11,12 +11,16 @@ CREATE TABLE plan
     precio_plan NUMERIC(8, 2) NOT NULL
 );
 
+INSERT INTO plan VALUES('Turbo Megas', 1300);
+
 CREATE TABLE olt
 (
     id_olt SERIAL PRIMARY KEY,
     nombre_olt VARCHAR(50) NOT NULL,
     region_olt VARCHAR(50) NOT NULL
 );
+
+INSERT INTO olt VALUES('SUR_CDMX', 'SUR');
 
 CREATE TABLE cliente
 (
@@ -28,6 +32,8 @@ CREATE TABLE cliente
     correo_cliente VARCHAR(40),
     cuenta_cliente BIGINT UNIQUE
 );
+
+INSERT INTO cliente VALUES('', 'SUR');
 
 CREATE TABLE cuenta
 (
@@ -43,6 +49,16 @@ CREATE TABLE cuenta
     FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
     FOREIGN KEY (id_plan) REFERENCES planes(id_plan),
     FOREIGN KEY (id_olt) REFERENCES olt(id_olt)
+);
+
+CREATE TABLE folio
+(
+    --definir atributos
+);
+
+CREATE TABLE equipo
+(
+    --definir atributos
 );
 
 ALTER TABLE cliente
