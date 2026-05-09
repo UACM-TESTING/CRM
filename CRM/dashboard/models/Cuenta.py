@@ -1,8 +1,32 @@
 from dashboard import db_connection
 
 """_summary_
-     esta clase nos permite crear una cuentas en sistema
-     encapsulara toda la logica relacionada con la cuenta
+     esta clase nos permite gestionar tickets en sistema
+     encapsulara toda la logica relacionada con el ticket
 """
+<<<<<<< HEAD:CRM/dashboard/models/Cuenta.py
 class Cuenta:
      pass
+=======
+class Account:
+     
+     #constructor de la cuenta
+     def __init__(self):
+          pass
+     
+     #metodo para consultar en bd la cuenta
+     def getAccount(self):
+          pass
+     
+     #metodo para insertar en bd la cuenta
+     def addAccount(self):
+          pass
+     
+     #metodo para inhabilitar cuenta en base de datos
+     def deleteAccount(self):
+          pass
+     
+     #metodo para actualizar en bd la cuenta
+     def updateAccount():
+          pass
+>>>>>>> origin/manuel:CRM/dashboard/models/Account.py

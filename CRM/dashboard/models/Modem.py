@@ -4,5 +4,29 @@ import EquipoDeRed
      esta clase nos permite crear modems en sistema
      encapsulara toda la logica relacionada del modem
 """
+<<<<<<< HEAD
 class Modem(EquipoDeRed):
      pass
+=======
+class Modem(NetworkDevice):
+     
+     #constructor del Modem
+     def __init__(self):
+          super.__init__()
+     
+     #metodo para consultar en bd el Modem
+     def getModem(self):
+          pass
+     
+     #metodo para insertar en bd el Modem
+     def addModem(self):
+          pass
+     
+     #metodo para inhabilitar el Modem en base de datos
+     def deleteModem(self):
+          pass
+     
+     #metodo para actualizar en bd el Modem
+     def updateModem():
+          pass
+>>>>>>> origin/manuel
