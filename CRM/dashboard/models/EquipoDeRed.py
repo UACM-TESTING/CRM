@@ -4,7 +4,7 @@ from dashboard import db_connection
      superclase que hereda a clases hijas: Modem, 
      WiFiExtemder, Switch, TvBox
 """
-class NetWorkDevice:
+class EquipoDeRed:
      
      self._serialNumber:str;
      self._macAddress:str;

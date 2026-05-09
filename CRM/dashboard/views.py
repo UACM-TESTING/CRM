@@ -24,14 +24,27 @@ def account_details(request):
     if query:
         try:
             # Buscamos la cuenta por su número (PK)
-            # Usamos select_related para traer también los datos del Cliente y la OLT de un solo golpe
-            cuenta_encontrada = Cuenta.objects.select_related('id_cliente', 'id_olt', 'id_plan').get(num_cuenta=query)
-        # Atrapamos DoesNotExist si no existe, y ValueError si el usuario teclea letras en vez de números
+            # Usamos select_related para traer también los 
+            # datos del Cliente y la OLT de un solo golpe
+            cuenta_encontrada = Cuenta.objects.select_related(
+                'id_cliente', 
+                'id_olt', 'id_plan').get(num_cuenta=query
+            )
+            # Atrapamos DoesNotExist si no existe, y ValueError 
+            # si el usuario teclea letras en vez de números
         except (Cuenta.DoesNotExist, ValueError):
             cuenta_encontrada = None
 
-    return render(request, 'html/account_details.html', {'cuenta': cuenta_encontrada})
+    return render(
+        request, 
+        'html/account_details.html', 
+        {'cuenta': cuenta_encontrada}
+    )
 
 def consulta(request):
     planes_disponibles = Plan.objects.all()
-    return render(request, 'html/consulta.html', context={'planes': planes_disponibles})
+    return render(
+        request, 
+        'html/consulta.html', 
+        context={'planes': planes_disponibles}
+    )

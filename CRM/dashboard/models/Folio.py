@@ -4,7 +4,7 @@ from dashboard import db_connection
      esta clase nos permite gestionar tickets en sistema
      encapsulara toda la logica relacionada con el ticket
 """
-class Account:
+class Folio:
      pass
 
      #se trae todos los tickets de la base de datos

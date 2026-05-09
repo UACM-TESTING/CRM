@@ -4,5 +4,5 @@ import NetworkDevice
      esta clase nos permite crear clientes en sistema
      encapsulara toda la logica relacionada con el cliente
 """
-class Switch(NetworkDevice):
+class Switch(EquipoDeRed):
      pass
