@@ -11,7 +11,7 @@ class Client:
           super.__init__()
      
      #metodo para consultar en bd el Client
-     def getClient(self):
+     def getClientByID(self):
           pass
      
      #metodo para insertar en bd el Client
