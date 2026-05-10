@@ -5,9 +5,8 @@ import NetworkDevice
      encapsulara toda la logica relacionada con el cliente
 """
 class Switch(EquipoDeRed):
-     pass
-class Switch(NetworkDevice):
      
+     pass
      #constructor de la Switch
      def __init__(self):
           super.__init__()

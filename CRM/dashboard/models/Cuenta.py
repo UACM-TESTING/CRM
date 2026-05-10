@@ -6,7 +6,6 @@ from dashboard import db_connection
 """
 class Cuenta:
      pass
-class Account:
      
      #constructor de la cuenta
      def __init__(self):

@@ -5,9 +5,8 @@ import EquipoDeRed
      encapsulara toda la logica relacionada del modem
 """
 class Modem(EquipoDeRed):
-     pass
-class Modem(NetworkDevice):
      
+     pass
      #constructor del Modem
      def __init__(self):
           super.__init__()
