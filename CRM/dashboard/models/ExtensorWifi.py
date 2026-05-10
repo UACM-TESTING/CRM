@@ -4,10 +4,6 @@ import EquipoDeRed
      esta clase nos permite crear wifi extenders en sistema
      encapsulara toda la logica relacionada con el wifi extender
 """
-<<<<<<< HEAD:CRM/dashboard/models/ExtensorWifi.py
-class ExtensorWifi(EquipoDeRed):
-     pass
-=======
 class WiFiExtemder(NetworkDevice):
      
      #constructor del WiFiExtender
@@ -29,4 +25,3 @@ class WiFiExtemder(NetworkDevice):
      #metodo para actualizar en la bd el WiFiExtender
      def updateWiFiExtender():
           pass
->>>>>>> origin/manuel:CRM/dashboard/models/WiFiExtender.py

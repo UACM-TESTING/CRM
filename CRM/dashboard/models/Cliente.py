@@ -4,10 +4,6 @@ from dashboard import db_connection
      esta clase nos permite crear clientes en sistema
      encapsulara toda la logica relacionada con el cliente
 """
-<<<<<<< HEAD:CRM/dashboard/models/Cliente.py
-class Cliente:
-     pass
-=======
 class Client:
      
      #constructor del Client
@@ -29,4 +25,3 @@ class Client:
      #metodo para actualizar en bd el Client
      def updateClient():
           pass
->>>>>>> origin/manuel:CRM/dashboard/models/Client.py

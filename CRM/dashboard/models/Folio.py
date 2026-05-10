@@ -5,13 +5,6 @@ from dashboard import db_connection
      encapsulara toda la logica relacionada con la cuenta
 """
 class Folio:
-     pass
-
-     #se trae todos los tickets de la base de datos
-     #para tenerlos a disposicion de la cuenta cuando
-     #se busca una cuenta
-     def getTickets():
-class Ticket:
      
      #constructor del Ticket
      def __init__(self):
