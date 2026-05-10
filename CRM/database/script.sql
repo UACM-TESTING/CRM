@@ -65,6 +65,7 @@ CREATE TABLE equipo
     id_equipo VARCHAR(20) PRIMARY KEY,
     mac_address VARCHAR(17) UNIQUE,
     descripcion VARCHAR(8),
+    equipo_activo BOOLEAN DEFAULT TRUE,
     id_cuenta INTEGER
 );
 
@@ -124,99 +125,106 @@ FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 ALTER TABLE equipo ADD CONSTRAINT FK_EQUIPO_CUENTA 
 FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 
--- TEST DATA
-INSERT INTO plan (nombre_plan, precio_plan, descuento) VALUES 
-('Basico', 299.00, 0.00),
-('Premium', 599.00, 50.00),
-('Empresarial', 899.00, 100.00),
-('Familiar', 449.00, 25.00),
-('Ultra', 1299.00, 150.00),
-('Hogar Plus', 349.00, 15.00),
-('Negocio', 749.00, 75.00),
-('Estudiante', 199.00, 0.00),
-('Corporativo', 1499.00, 200.00),
-('Estandar', 399.00, 20.00);
+-- Insert 10 plans
+INSERT INTO plan (nombre_plan, precio_plan, descuento) VALUES
+('Plan Básico', 299.00, 0.00),
+('Plan Estándar', 499.00, 50.00),
+('Plan Premium', 799.00, 100.00),
+('Plan Empresarial', 1299.00, 200.00),
+('Plan Hogar', 399.00, 30.00),
+('Plan Estudiante', 249.00, 0.00),
+('Plan Familiar', 699.00, 80.00),
+('Plan Ultra', 999.00, 150.00),
+('Plan Lite', 199.00, 0.00),
+('Plan Pro', 1499.00, 250.00);
 
-INSERT INTO olt (nombre_olt, region_olt) VALUES 
-('OLT-Norte', 'Norte'),
-('OLT-Sur', 'Sur'),
-('OLT-Este', 'Este'),
-('OLT-Oeste', 'Oeste'),
-('OLT-Centro', 'Centro'),
-('OLT-Noreste', 'Noreste'),
-('OLT-Noroeste', 'Noroeste'),
-('OLT-Sureste', 'Sureste'),
-('OLT-Suroeste', 'Suroeste'),
-('OLT-Central1', 'Centro');
+-- Insert 10 OLTs
+INSERT INTO olt (nombre_olt, region_olt) VALUES
+('OLT-Norte-01', 'Zona Norte'),
+('OLT-Sur-01', 'Zona Sur'),
+('OLT-Este-01', 'Zona Este'),
+('OLT-Oeste-01', 'Zona Oeste'),
+('OLT-Centro-01', 'Zona Centro'),
+('OLT-Norte-02', 'Zona Norte'),
+('OLT-Sur-02', 'Zona Sur'),
+('OLT-Este-02', 'Zona Este'),
+('OLT-Oeste-02', 'Zona Oeste'),
+('OLT-Centro-02', 'Zona Centro');
 
-INSERT INTO acceso (nombre_usuario, clave_acceso) VALUES 
-('admin', 'admin123'),
-('soporte', 'soporte123'),
-('tecnico1', 'tec123'),
-('tecnico2', 'tec456'),
-('ventas1', 'ven123'),
-('tecnico3', 'tec789'),
-('tecnico4', 'tec101'),
-('ventas2', 'ven456'),
-('ventas3', 'ven789'),
-('supervisor1', 'sup123');
+-- Insert 10 accesos
+INSERT INTO acceso (nombre_usuario, clave_acceso) VALUES
+('jperez', 'pass123'),
+('mgarcia', 'pass456'),
+('lrodriguez', 'pass789'),
+('alopez', 'pass321'),
+('cmartinez', 'pass654'),
+('rhernandez', 'pass987'),
+('fgonzalez', 'pass147'),
+('psanchez', 'pass258'),
+('dramirez', 'pass369'),
+('jtorres', 'pass741');
 
-INSERT INTO empleado (nombre, apellido_paterno, apellido_materno, nombre_usuario) VALUES 
-('Juan', 'Perez', 'Lopez', 'admin'),
-('Maria', 'Garcia', 'Martinez', 'soporte'),
-('Pedro', 'Martinez', 'Ruiz', 'tecnico1'),
-('Laura', 'Lopez', 'Diaz', 'tecnico2'),
-('Roberto', 'Gonzalez', 'Torres', 'ventas1'),
-('Fernando', 'Moreno', 'Silva', 'tecnico3'),
-('Carmen', 'Gutierrez', 'Ramos', 'tecnico4'),
-('Diego', 'Herrera', 'Medina', 'ventas2'),
-('Patricia', 'Romero', 'Aguilar', 'ventas3'),
-('Ricardo', 'Castillo', 'Vazquez', 'supervisor1');
+-- Insert 10 empleados
+INSERT INTO empleado (nombre, apellido_paterno, apellido_materno, nombre_usuario) VALUES
+('Juan', 'Pérez', 'García', 'jperez'),
+('María', 'García', 'López', 'mgarcia'),
+('Luis', 'Rodríguez', 'Martínez', 'lrodriguez'),
+('Ana', 'López', 'Hernández', 'alopez'),
+('Carlos', 'Martínez', 'González', 'cmartinez'),
+('Rosa', 'Hernández', 'Sánchez', 'rhernandez'),
+('Fernando', 'González', 'Ramírez', 'fgonzalez'),
+('Patricia', 'Sánchez', 'Torres', 'psanchez'),
+('Diego', 'Ramírez', 'Flores', 'dramirez'),
+('Jorge', 'Torres', 'Morales', 'jtorres');
 
-INSERT INTO cliente (nombre_cliente, apellido_paterno, apellido_materno, telefono_celular, correo_cliente) VALUES 
-('Carlos', 'Rodriguez', 'Sanchez', '5551234567', 'carlos@email.com'),
-('Ana', 'Hernandez', 'Gomez', '5559876543', 'ana@email.com'),
-('Luis', 'Ramirez', 'Castro', '5551112233', 'luis@email.com'),
-('Sofia', 'Flores', 'Morales', '5552223344', 'sofia@email.com'),
-('Miguel', 'Vargas', 'Ortiz', '5553334455', 'miguel@email.com'),
-('Elena', 'Mendoza', 'Reyes', '5554445566', 'elena@email.com'),
-('Jorge', 'Cruz', 'Jimenez', '5555556677', 'jorge@email.com'),
-('Andres', 'Salazar', 'Vega', '5556667788', 'andres@email.com'),
-('Daniela', 'Paredes', 'Luna', '5557778899', 'daniela@email.com'),
-('Oscar', 'Navarro', 'Rojas', '5558889900', 'oscar@email.com');
+-- Insert 10 clientes
+INSERT INTO cliente (nombre_cliente, apellido_paterno, apellido_materno, telefono_celular, correo_cliente) VALUES
+('Roberto', 'Díaz', 'Cruz', '5551234567', 'roberto.diaz@email.com'),
+('Laura', 'Morales', 'Ruiz', '5552345678', 'laura.morales@email.com'),
+('Miguel', 'Castro', 'Ortiz', '5553456789', 'miguel.castro@email.com'),
+('Sofia', 'Vargas', 'Mendoza', '5554567890', 'sofia.vargas@email.com'),
+('Pedro', 'Jiménez', 'Reyes', '5555678901', 'pedro.jimenez@email.com'),
+('Elena', 'Romero', 'Silva', '5556789012', 'elena.romero@email.com'),
+('Alberto', 'Gutiérrez', 'Medina', '5557890123', 'alberto.gutierrez@email.com'),
+('Carmen', 'Aguilar', 'Navarro', '5558901234', 'carmen.aguilar@email.com'),
+('Ricardo', 'Mendez', 'Cortés', '5559012345', 'ricardo.mendez@email.com'),
+('Gabriela', 'Ríos', 'Vega', '5550123456', 'gabriela.rios@email.com');
 
-INSERT INTO cuenta (id_cliente, id_olt, id_plan, telefono_fijo) VALUES 
-(1, 1, 1, '5555551111'),
-(2, 2, 2, '5555552222'),
-(3, 3, 3, '5555553333'),
-(4, 4, 4, '5555554444'),
-(5, 5, 5, '5555555555'),
-(6, 6, 6, '5555556666'),
-(7, 7, 7, '5555557777'),
-(8, 8, 8, '5555558888'),
-(9, 9, 9, '5555559999'),
-(10, 10, 10, '5555550000');
+-- Insert 10 cuentas
+INSERT INTO cuenta (id_cliente, id_olt, id_plan, fecha_corte, fecha_limite, telefono_fijo) VALUES
+(1, 1, 1, '2024-01-15', '2024-01-20', '5581234567'),
+(2, 2, 2, '2024-01-15', '2024-01-20', '5582345678'),
+(3, 3, 3, '2024-01-15', '2024-01-20', '5583456789'),
+(4, 4, 4, '2024-01-15', '2024-01-20', '5584567890'),
+(5, 5, 5, '2024-01-15', '2024-01-20', '5585678901'),
+(6, 6, 6, '2024-01-15', '2024-01-20', '5586789012'),
+(7, 7, 7, '2024-01-15', '2024-01-20', '5587890123'),
+(8, 8, 8, '2024-01-15', '2024-01-20', '5588901234'),
+(9, 9, 9, '2024-01-15', '2024-01-20', '5589012345'),
+(10, 10, 10, '2024-01-15', '2024-01-20', '5580123456');
 
-INSERT INTO equipo (id_equipo, mac_address, descripcion, id_cuenta) VALUES 
-('ONT-001', '00:11:22:33:44:55', 'Huawei', 1000000000),
-('ONT-002', 'AA:BB:CC:DD:EE:FF', 'ZTE', 1000000001),
-('ONT-003', '11:22:33:44:55:66', 'Nokia', 1000000002),
-('ONT-004', '22:33:44:55:66:77', 'Huawei', 1000000003),
-('ONT-005', '33:44:55:66:77:88', 'ZTE', 1000000004),
-('ONT-006', '44:55:66:77:88:99', 'Huawei', 1000000005),
-('ONT-007', '55:66:77:88:99:AA', 'Nokia', 1000000006),
-('ONT-008', '66:77:88:99:AA:BB', 'Huawei', 1000000007),
-('ONT-009', '77:88:99:AA:BB:CC', 'ZTE', 1000000008),
-('ONT-010', '88:99:AA:BB:CC:DD', 'Nokia', 1000000009);
+-- Insert 10 equipos
+INSERT INTO equipo (id_equipo, mac_address, descripcion, id_cuenta) VALUES
+('ONT-001', '00:11:22:33:44:55', 'ONT', 1000000000),
+('ONT-002', '00:11:22:33:44:56', 'ONT', 1000000001),
+('ONT-003', '00:11:22:33:44:57', 'ONT', 1000000002),
+('ONT-004', '00:11:22:33:44:58', 'ONT', 1000000003),
+('ONT-005', '00:11:22:33:44:59', 'ONT', 1000000004),
+('ONT-006', '00:11:22:33:44:5A', 'ONT', 1000000005),
+('ONT-007', '00:11:22:33:44:5B', 'ONT', 1000000006),
+('ONT-008', '00:11:22:33:44:5C', 'ONT', 1000000007),
+('ONT-009', '00:11:22:33:44:5D', 'ONT', 1000000008),
+('ONT-010', '00:11:22:33:44:5E', 'ONT', 1000000009);
 
-INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, id_empleado, id_cuenta) VALUES 
-('Soporte', 'Conexion', 'Sin internet', 'Reinicio ONT', 'Cliente reporta sin servicio', 10000000, 1000000000),
-('Ventas', 'Instalacion', 'Nueva alta', 'Instalado', 'Nueva instalacion completada', 10000001, 1000000001),
-('Soporte', 'Velocidad', 'Lentitud', 'Cambio plan', 'Cliente solicita upgrade', 10000002, 1000000002),
-('Tecnico', 'Equipo', 'ONT dañado', 'Reemplazo', 'Equipo reemplazado', 10000003, 1000000003),
-('Soporte', 'Conexion', 'Intermitente', 'Ajuste señal', 'Problema de señal resuelto', 10000004, 1000000004),
-('Ventas', 'Instalacion', 'Nueva alta', 'Instalado', 'Cliente nuevo activado', 10000005, 1000000005),
-('Soporte', 'Facturacion', 'Cobro doble', 'Ajuste', 'Aclaracion realizada', 10000006, 1000000006),
-('Tecnico', 'Cableado', 'Fibra cortada', 'Reparacion', 'Fibra reparada en poste', 10000007, 1000000007),
-('Soporte', 'Conexion', 'Sin servicio', 'Reinicio equipo', 'Servicio restablecido tras reinicio', 10000008, 1000000008),
-('Ventas', 'Instalacion', 'Nueva alta', 'Instalado', 'Instalacion residencial completada', 10000009, 1000000009);
+-- Insert 10 folios
+INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, id_empleado, id_cuenta) VALUES
+('Soporte Técnico', 'Sin Internet', 'Sin señal ONT', 'Reinicio de equipo', 'Cliente reporta sin servicio de internet', 10000000, 1000000000),
+('Atención Cliente', 'Lentitud', 'Velocidad baja', 'Optimización', 'Cliente reporta velocidad menor a contratada', 10000001, 1000000001),
+('Soporte Técnico', 'Sin Internet', 'Cable dañado', 'Cambio de cable', 'Se detectó cable de fibra dañado', 10000002, 1000000002),
+('Instalaciones', 'Sin servicio', 'Equipo defectuoso', 'Cambio de ONT', 'ONT no enciende, se requiere reemplazo', 10000003, 1000000003),
+('Soporte Técnico', 'Intermitencia', 'Señal débil', 'Ajuste de potencia', 'Señal de fibra fuera de rango', 10000004, 1000000004),
+('Atención Cliente', 'Facturación', 'Cobro incorrecto', 'Ajuste de cuenta', 'Cliente reporta cargo duplicado', 10000005, 1000000005),
+('Soporte Técnico', 'Sin Internet', 'Configuración', 'Reconfiguración', 'Equipo perdió configuración', 10000006, 1000000006),
+('Instalaciones', 'Cambio plan', 'Upgrade', 'Cambio de plan', 'Cliente solicita cambio a plan superior', 10000007, 1000000007),
+('Soporte Técnico', 'WiFi', 'Cobertura baja', 'Reubicación ONT', 'Mala cobertura WiFi en domicilio', 10000008, 1000000008),
+('Atención Cliente', 'Consulta', 'Información', 'Información', 'Cliente solicita información de servicios', 10000009, 1000000009);
