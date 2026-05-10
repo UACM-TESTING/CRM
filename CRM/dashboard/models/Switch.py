@@ -6,7 +6,6 @@ import NetworkDevice
 """
 class Switch(EquipoDeRed):
      
-     pass
      #constructor de la Switch
      def __init__(self):
           super.__init__()

@@ -4,7 +4,7 @@ from dashboard import db_connection
      esta clase nos permite crear clientes en sistema
      encapsulara toda la logica relacionada con el cliente
 """
-class Client:
+class Cliente:
      
      #constructor del Client
      def __init__(self):

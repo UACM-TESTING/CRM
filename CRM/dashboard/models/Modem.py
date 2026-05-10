@@ -6,7 +6,6 @@ import EquipoDeRed
 """
 class Modem(EquipoDeRed):
      
-     pass
      #constructor del Modem
      def __init__(self):
           super.__init__()

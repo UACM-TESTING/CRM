@@ -5,7 +5,6 @@ from dashboard import db_connection
      encapsulara toda la logica relacionada con el ticket
 """
 class Cuenta:
-     pass
      
      #constructor de la cuenta
      def __init__(self):
