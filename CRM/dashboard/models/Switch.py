@@ -4,10 +4,8 @@ import NetworkDevice
      esta clase nos permite crear clientes en sistema
      encapsulara toda la logica relacionada con el cliente
 """
-<<<<<<< HEAD
 class Switch(EquipoDeRed):
      pass
-=======
 class Switch(NetworkDevice):
      
      #constructor de la Switch
@@ -29,4 +27,3 @@ class Switch(NetworkDevice):
      #metodo para actualizar en bd la Switch
      def updateSwitch():
           pass
->>>>>>> origin/manuel

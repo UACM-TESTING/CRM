@@ -4,7 +4,6 @@ from dashboard import db_connection
      esta clase nos permite crear una cuentas en sistema
      encapsulara toda la logica relacionada con la cuenta
 """
-<<<<<<< HEAD:CRM/dashboard/models/Folio.py
 class Folio:
      pass
 
@@ -12,7 +11,6 @@ class Folio:
      #para tenerlos a disposicion de la cuenta cuando
      #se busca una cuenta
      def getTickets():
-=======
 class Ticket:
      
      #constructor del Ticket
@@ -37,5 +35,4 @@ class Ticket:
      
      #metodo para actualizar el Ticket
      def updateTicket():
->>>>>>> origin/manuel:CRM/dashboard/models/Ticket.py
           pass

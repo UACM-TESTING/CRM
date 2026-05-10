@@ -4,10 +4,8 @@ import EquipoDeRed
      esta clase nos permite crear modems en sistema
      encapsulara toda la logica relacionada del modem
 """
-<<<<<<< HEAD
 class Modem(EquipoDeRed):
      pass
-=======
 class Modem(NetworkDevice):
      
      #constructor del Modem
@@ -29,4 +27,3 @@ class Modem(NetworkDevice):
      #metodo para actualizar en bd el Modem
      def updateModem():
           pass
->>>>>>> origin/manuel

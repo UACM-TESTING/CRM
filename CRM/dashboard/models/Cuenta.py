@@ -4,10 +4,8 @@ from dashboard import db_connection
      esta clase nos permite gestionar tickets en sistema
      encapsulara toda la logica relacionada con el ticket
 """
-<<<<<<< HEAD:CRM/dashboard/models/Cuenta.py
 class Cuenta:
      pass
-=======
 class Account:
      
      #constructor de la cuenta
@@ -29,4 +27,3 @@ class Account:
      #metodo para actualizar en bd la cuenta
      def updateAccount():
           pass
->>>>>>> origin/manuel:CRM/dashboard/models/Account.py

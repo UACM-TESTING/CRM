@@ -1,7 +1,6 @@
 import psycopg2
 from psycopg2 import OperationalError
 from django.conf import settings
-
 class DatabaseConnection:
 
     def __init__(self):
