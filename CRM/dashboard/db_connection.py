@@ -18,10 +18,6 @@ class DatabaseConnection:
         )
         self.cursor = self.connection.cursor()
 
-    def fetchall(self, query):
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
-
     def close(self):
         if self.cursor:
             self.cursor.close()

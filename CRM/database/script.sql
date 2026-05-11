@@ -228,3 +228,12 @@ INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, 
 ('Instalaciones', 'Cambio plan', 'Upgrade', 'Cambio de plan', 'Cliente solicita cambio a plan superior', 10000007, 1000000007),
 ('Soporte Técnico', 'WiFi', 'Cobertura baja', 'Reubicación ONT', 'Mala cobertura WiFi en domicilio', 10000008, 1000000008),
 ('Atención Cliente', 'Consulta', 'Información', 'Información', 'Cliente solicita información de servicios', 10000009, 1000000009);
+
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;

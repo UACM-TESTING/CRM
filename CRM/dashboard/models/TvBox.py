@@ -8,7 +8,7 @@ class TvBox(EquipoDeRed):
      
      #constructor de la tv
      def __init__(self):
-          pass
+          super.__init__()
      
      #metodo para consultar en bd la tv
      def getTvBox(self):

@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'CRM.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'CRM',
+        'NAME': 'crm',
         'USER': 'testing',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -119,11 +119,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'dashboard/static/css',
-    BASE_DIR / 'dashboard/static/images',
-    BASE_DIR / 'dashboard/templates/html',
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

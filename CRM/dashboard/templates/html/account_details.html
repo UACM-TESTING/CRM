@@ -30,176 +30,24 @@
     </div>
 </nav>
 
-<div class="container-fluid px-4 mt-4">
-    
-    <div class="row row-cols-1 row-cols-md-6 g-2 mb-3">
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/user.png' %}" alt="Cliente" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CLIENTE
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.nombre_cliente|default:"" }} {{ cuenta.id_cliente.apellido_paterno|default:"SIN REGISTRO" }}</strong>
-                </div>
+    {% for dato_personal in cliente%}
+        {% for dato in dato_personal%}
+            <div>
+                <p>{{dato}}</p>
             </div>
-        </div>
+        {% endfor%}
+    {% endfor%}
 
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/id-badge.png' %}" alt="Cuenta" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CUENTA
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.num_cuenta|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
+    <script>
+        //aqui para el modificar el DOM
+    </script>
 
-        <div class="col">
-            {% if cuenta %}
-                <div class="card h-100 shadow-sm border-0 text-white {% if cuenta.cuenta_activa %}bg-success{% else %}bg-danger{% endif %}">
-                    <div class="card-body py-2 px-3">
-                        <small class="d-block" style="font-size: 0.7rem; opacity: 0.9;">
-                            <img src="{% static 'icons/plug-circle-bolt.png' %}" alt="Estatus" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                            ESTATUS
-                        </small>
-                        <strong style="font-size: 0.85rem;">{% if cuenta.cuenta_activa %}ACTIVA{% else %}SUSPENDIDA{% endif %}</strong>
-                    </div>
-                </div>
-            {% else %}
-                <div class="card h-100 shadow-sm border-0" style="background-color: #e9ecef; border-left: 5px solid #adb5bd !important;">
-                    <div class="card-body py-2 px-3">
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">⚡ ESTATUS</small>
-                        <strong style="font-size: 0.85rem;">---</strong>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/envelope.png' %}" alt="Correo" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CORREO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.correo_cliente|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #007bff !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/mobile-notch.png' %}" alt="Celular" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CELULAR
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.telefono_celular|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #007bff !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/phone-rotary.png' %}" alt="Teléfono fijo" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        TEL. FIJO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.telefono_fijo|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-6 g-2 mb-4">
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #fd7e14 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/box-open.png' %}" alt="Plan" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        PLAN
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_plan.nombre_plan|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6c757d !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/calendar-lines-pen.png' %}" alt="Fecha alta" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        FECHA ALTA
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_activacion|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #dc3545 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/daily-calendar.png' %}" alt="Fecha corte" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        FECHA CORTE
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_corte|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #ffc107 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/calendar-clock.png' %}" alt="Límite pago" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        LÍMITE PAGO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_limite|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #17a2b8 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/region-pin-alt.png' %}" alt="Región" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        REGIÓN
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_olt.region_olt|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #17a2b8 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/globe.png' %}" alt="Nodo OLT" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        NODO / OLT
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_olt.nombre_olt|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% if not cuenta %}
-        <div class="alert alert-warning text-center shadow-sm">
-            <strong>⚠️ Atención:</strong> No se ha cargado ninguna cuenta. Realice una búsqueda en el Dashboard.
-        </div>
-    {% endif %}
-
+    <br>
     <div class="accordion shadow-sm" id="accordionDashboard">
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item1">
-                    Sección 1 - Información Adicional
+                    Información
                 </button>
             </h2>
             <div id="item1" class="accordion-collapse collapse show" data-bs-parent="#accordionDashboard">
@@ -211,13 +59,36 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item2">
-                    Sección 2 - Historial de Tickets
+                    Historial de Folios
                 </button>
             </h2>
             <div id="item2" class="accordion-collapse collapse" data-bs-parent="#accordionDashboard">
-                <div class="accordion-body">Aquí se mostrarán los folios generados anteriormente para esta cuenta.</div>
+                <div class="accordion-body">
+                    <table class="table">
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Area Origen</th>
+                                <th>Falla</th>
+                                <th>Falla Especifica</th>
+                                <th>Solucion</th>
+                                <th>Descripción</th>
+                                <th>Empleado</th>
+                                <th>Cuenta</th>
+                                <th>Fecha de Creacion</th>
+                            </tr>
+                            {% for ticket in tickets %}
+                            <tr>
+                                {% for folio in ticket %}
+                                    <td>{{ folio }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
 {% endblock %}
