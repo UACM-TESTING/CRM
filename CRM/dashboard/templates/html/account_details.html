@@ -30,13 +30,19 @@
     </div>
 </nav>
 
-    {% for dato_personal in cliente%}
-        {% for dato in dato_personal%}
-            <div>
-                <p>{{dato}}</p>
-            </div>
-        {% endfor%}
-    {% endfor%}
+<!-- antes tenias varios divs estaticos, ahora tienes n divs dinamicos  -->
+    <div class="container mt-4">
+        <div class="d-flex flex-wrap gap-3">
+            {% for dato_personal in cliente%}
+                {% for dato in dato_personal%}
+                    <div class="flex-fill p-3 border rounded bg-light" style="min-width: 200px;">
+                        <i class="bi bi-person-circle me-2 text-primary"></i>
+                        <span class="fw-semibold">{{dato}}</span>
+                    </div>
+                {% endfor%}
+            {% endfor%}
+        </div>
+    </div>
 
     <script>
         //aqui para el modificar el DOM
