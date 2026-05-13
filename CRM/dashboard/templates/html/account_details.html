@@ -1,5 +1,4 @@
 {% extends "father.html" %}
-{% load static %}
 
 {% block title %}Detalles de Cuenta{% endblock %}
 
@@ -21,7 +20,9 @@
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Acciones</a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar Sesión</a></li>
                     </ul>
                 </li>
@@ -31,191 +32,116 @@
 </nav>
 
 <div class="container-fluid px-4 mt-4">
-    
-    <div class="row row-cols-1 row-cols-md-6 g-2 mb-3">
+
+    {% if detalles_cuenta %}
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-4">
+        {% for item in detalles_cuenta %}
         <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/user.png' %}" alt="Cliente" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CLIENTE
+            <div class="card h-100 shadow-sm border-0"
+                style="background-color: #f8f9fa; border-left: 5px solid {{ item.color }} !important;">
+                <div class="card-body py-2 px-2"> <small class="text-muted d-block fw-bold text-truncate"
+                        style="font-size: 0.65rem;" title="{{ item.etiqueta }}">
+                        <i class="bi {{ item.icono }} me-1" style="font-size: 0.85rem; color: {{ item.color }};"></i>
+                        {{ item.etiqueta }}
                     </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.nombre_cliente|default:"" }} {{ cuenta.id_cliente.apellido_paterno|default:"SIN REGISTRO" }}</strong>
+                    <strong class="d-block text-truncate" style="font-size: 0.8rem; color: #333;"
+                        title="{{ item.valor|default:'---' }}">
+                        {{ item.valor|default:"---" }}
+                    </strong>
                 </div>
             </div>
         </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/id-badge.png' %}" alt="Cuenta" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CUENTA
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.num_cuenta|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            {% if cuenta %}
-                <div class="card h-100 shadow-sm border-0 text-white {% if cuenta.cuenta_activa %}bg-success{% else %}bg-danger{% endif %}">
-                    <div class="card-body py-2 px-3">
-                        <small class="d-block" style="font-size: 0.7rem; opacity: 0.9;">
-                            <img src="{% static 'icons/plug-circle-bolt.png' %}" alt="Estatus" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                            ESTATUS
-                        </small>
-                        <strong style="font-size: 0.85rem;">{% if cuenta.cuenta_activa %}ACTIVA{% else %}SUSPENDIDA{% endif %}</strong>
-                    </div>
-                </div>
-            {% else %}
-                <div class="card h-100 shadow-sm border-0" style="background-color: #e9ecef; border-left: 5px solid #adb5bd !important;">
-                    <div class="card-body py-2 px-3">
-                        <small class="text-muted d-block" style="font-size: 0.7rem;">⚡ ESTATUS</small>
-                        <strong style="font-size: 0.85rem;">---</strong>
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6f42c1 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/envelope.png' %}" alt="Correo" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CORREO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.correo_cliente|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #007bff !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/mobile-notch.png' %}" alt="Celular" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        CELULAR
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_cliente.telefono_celular|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #007bff !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/phone-rotary.png' %}" alt="Teléfono fijo" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        TEL. FIJO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.telefono_fijo|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
-
-    <div class="row row-cols-1 row-cols-md-6 g-2 mb-4">
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #fd7e14 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/box-open.png' %}" alt="Plan" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        PLAN
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_plan.nombre_plan|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #6c757d !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/calendar-lines-pen.png' %}" alt="Fecha alta" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        FECHA ALTA
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_activacion|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #dc3545 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/daily-calendar.png' %}" alt="Fecha corte" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        FECHA CORTE
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_corte|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #ffc107 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/calendar-clock.png' %}" alt="Límite pago" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        LÍMITE PAGO
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.fecha_limite|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #17a2b8 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/region-pin-alt.png' %}" alt="Región" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        REGIÓN
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_olt.region_olt|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 shadow-sm border-0" style="background-color: #f8f9fa; border-left: 5px solid #17a2b8 !important;">
-                <div class="card-body py-2 px-3">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">
-                        <img src="{% static 'icons/globe.png' %}" alt="Nodo OLT" style="width: 1rem; height: 1rem; vertical-align: text-bottom; margin-right: 0.35rem;">
-                        NODO / OLT
-                    </small>
-                    <strong style="font-size: 0.85rem;">{{ cuenta.id_olt.nombre_olt|default:"---" }}</strong>
-                </div>
-            </div>
-        </div>
+    {% else %}
+    <div class="alert alert-warning text-center shadow-sm mb-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>Atención:</strong> No se ha cargado ninguna cuenta. Realice una búsqueda en el Dashboard.
     </div>
-
-    {% if not cuenta %}
-        <div class="alert alert-warning text-center shadow-sm">
-            <strong>⚠️ Atención:</strong> No se ha cargado ninguna cuenta. Realice una búsqueda en el Dashboard.
-        </div>
     {% endif %}
 
     <div class="accordion shadow-sm" id="accordionDashboard">
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item1">
-                    Sección 1 - Información Adicional
+                    <i class="bi bi-info-circle me-2 text-primary"></i> Sección 1 - Información Adicional
                 </button>
             </h2>
             <div id="item1" class="accordion-collapse collapse show" data-bs-parent="#accordionDashboard">
                 <div class="accordion-body">
-                    Contenido de soporte para la cuenta. 
+                    <div class="row">
+                        <div class="col-md-7 border-end">
+                            <h6 class="text-primary fw-bold"><i class="bi bi-house-door me-2"></i>Dirección de
+                                Instalación</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.95rem;">
+                                {{ info_adicional.domicilio|default:"Sin dirección registrada en sistema." }}
+                            </p>
+                            <hr class="d-md-none">
+                        </div>
+
+                        <div class="col-md-5">
+                            <h6 class="text-primary fw-bold"><i class="bi bi-cash-stack me-2"></i>Resumen Financiero
+                            </h6>
+                            <table class="table table-sm table-borderless mb-0" style="font-size: 0.9rem;">
+                                <tr>
+                                    <td class="text-muted">Costo Mensual:</td>
+                                    <td class="fw-bold text-end">${{ info_adicional.costo_plan|default:"0.00" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Saldo Pendiente:</td>
+                                    <td
+                                        class="fw-bold text-end {% if info_adicional.saldo > 0 %}text-danger{% else %}text-success{% endif %}">
+                                        ${{ info_adicional.saldo|default:"0.00" }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item2">
-                    Sección 2 - Historial de Tickets
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#item2">
+                    <i class="bi bi-clock-history me-2 text-secondary"></i> Sección 2 - Historial de Tickets
                 </button>
             </h2>
             <div id="item2" class="accordion-collapse collapse" data-bs-parent="#accordionDashboard">
-                <div class="accordion-body">Aquí se mostrarán los folios generados anteriormente para esta cuenta.</div>
+                <div class="accordion-body table-responsive">
+                    <table class="table table-hover table-bordered align-middle text-center"
+                        style="font-size: 0.85rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Área Origen</th>
+                                <th>Falla</th>
+                                <th>Falla Específica</th>
+                                <th>Solución</th>
+                                <th>Descripción</th>
+                                <th>Empleado</th>
+                                <th>Cuenta</th>
+                                <th>Fecha Creación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if tickets %}
+                            {% for ticket in tickets %}
+                            <tr>
+                                {% for folio in ticket %}
+                                <td>{{ folio }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="9" class="text-muted text-center py-3">No hay historial de folios para esta
+                                    cuenta.</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
