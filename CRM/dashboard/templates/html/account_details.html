@@ -80,18 +80,32 @@
                         </div>
 
                         <div class="col-md-5">
-                            <h6 class="text-primary fw-bold"><i class="bi bi-cash-stack me-2"></i>Resumen Financiero
-                            </h6>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="text-primary fw-bold mb-0"><i class="bi bi-cash-stack me-2"></i>Resumen Financiero</h6>
+                                {% if detalles_cuenta %}
+                                <button type="button" class="btn btn-sm btn-outline-primary" style="color: #6f42c1; border-color: #6f42c1;" data-bs-toggle="modal" data-bs-target="#modalDescuento">
+                                    <i class="bi bi-tags me-1"></i> Aplicar Descuento
+                                </button>
+                                {% endif %}
+                            </div>
+                            
                             <table class="table table-sm table-borderless mb-0" style="font-size: 0.9rem;">
                                 <tr>
-                                    <td class="text-muted">Costo Mensual:</td>
-                                    <td class="fw-bold text-end">${{ info_adicional.costo_plan|default:"0.00" }}</td>
+                                    <td class="text-muted">Precio Base del Plan:</td>
+                                    <td class="text-end">${{ info_adicional.costo_plan|floatformat:2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-muted">Descuento Aplicado ({{ info_adicional.porcentaje_descuento|default:"0" }}%):</td>
+                                    <td class="text-end text-success">-${{ info_adicional.monto_descuento|floatformat:2 }}</td>
+                                </tr>
+                                <tr class="border-top">
+                                    <td class="text-muted fw-bold">Costo Mensual Final:</td>
+                                    <td class="fw-bold text-end" style="color: #6f42c1;">${{ info_adicional.costo_final|floatformat:2 }}</td>
                                 </tr>
                                 <tr>
                                     <td class="text-muted">Saldo Pendiente:</td>
-                                    <td
-                                        class="fw-bold text-end {% if info_adicional.saldo > 0 %}text-danger{% else %}text-success{% endif %}">
-                                        ${{ info_adicional.saldo|default:"0.00" }}
+                                    <td class="fw-bold text-end {% if info_adicional.saldo > 0 %}text-danger{% else %}text-success{% endif %}">
+                                        ${{ info_adicional.saldo|floatformat:2 }}
                                     </td>
                                 </tr>
                             </table>
@@ -145,5 +159,42 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="modalDescuento" tabindex="-1" aria-labelledby="modalDescuentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #6f42c1; color: white;">
+        <h6 class="modal-title" id="modalDescuentoLabel"><i class="bi bi-tags-fill me-2"></i>Asignar Descuento</h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{% url 'aplicar_descuento' %}">
+          {% csrf_token %}
+          <input type="hidden" name="id_cuenta" value="{{ request.GET.q }}">
+          
+          <div class="modal-body text-center">
+              <p class="small text-muted mb-3">Selecciona el porcentaje de descuento que se aplicará a esta cuenta:</p>
+              
+              <div class="btn-group w-100" role="group">
+                  <input type="radio" class="btn-check" name="descuento" id="desc0" value="0" required>
+                  <label class="btn btn-outline-danger" for="desc0">Quitar (0%)</label>
+
+                  <input type="radio" class="btn-check" name="descuento" id="desc10" value="10">
+                  <label class="btn btn-outline-secondary" for="desc10">10%</label>
+
+                  <input type="radio" class="btn-check" name="descuento" id="desc20" value="20">
+                  <label class="btn btn-outline-secondary" for="desc20">20%</label>
+
+                  <input type="radio" class="btn-check" name="descuento" id="desc30" value="30">
+                  <label class="btn btn-outline-secondary" for="desc30">30%</label>
+              </div>
+          </div>
+          <div class="modal-footer bg-light px-3 py-2 border-top">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-sm btn-primary" style="background-color: #6f42c1; border-color: #6f42c1;">Confirmar</button>
+          </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

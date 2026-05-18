@@ -57,8 +57,14 @@ def account_details(request):
         messages.error(request, f"La cuenta '{id_cuenta_buscada}' no se encontró en los registros del sistema.")
         return redirect('dashboard')
         
-    # 4. Si la cuenta existe y todo está bien, lanzamos alerta de éxito
-    messages.success(request, f"Cuenta {id_cuenta_buscada} localizada exitosamente.")
+    # A. Leemos si existe el parámetro 'src' en la URL (si no existe, por defecto viene vacío '')
+    origen = request.GET.get('src', '').strip()
+    
+    # B. CONDICIONAL: Si el origen ES DIFERENTE de 'update', significa que es una búsqueda limpia.
+    # Por lo tanto, lanzamos el mensaje de éxito. 
+    # Si el origen es IGUAL a 'update', este bloque se lo salta y no se duplica la alerta.
+    if origen != 'update':
+        messages.success(request, f"Cuenta {id_cuenta_buscada} localizada exitosamente.")
     
     # mapeo original de los datos
     detalles_cuenta = [
@@ -76,11 +82,24 @@ def account_details(request):
         {'etiqueta': 'NODO / OLT', 'valor': cuenta_datos.get('nodo'), 'icono': 'bi-router', 'color': '#17a2b8'}
     ]
     
-    # Empaquetamos los nuevos datos de dirección y saldo
+    # Lógica financiera para procesar los descuentos
+    precio_base = cuenta_datos.get('precio_plan', 0.0)
+    porcentaje_descuento = cuenta_datos.get('descuento', 0)
+    
+    # Calculamos de cuánto es el ahorro exacto en dinero
+    monto_descuento = precio_base * (porcentaje_descuento / 100.0)
+    
+    # Calculamos el total real que el cliente debe pagar
+    costo_mensual_final = precio_base - monto_descuento
+
+    # Empaquetamos los nuevos datos y la dirección para enviarlos al HTML
     info_adicional = {
         'domicilio': cuenta_datos.get('direccion', 'No registrada'),
-        'saldo': cuenta_datos.get('saldo', 0.0),
-        'costo_plan': cuenta_datos.get('precio_plan', 0.0),
+        'costo_plan': precio_base,                      # Ej: 799.00
+        'porcentaje_descuento': porcentaje_descuento,   # Ej: 20
+        'monto_descuento': monto_descuento,             # Ej: 159.80
+        'costo_final': costo_mensual_final,             # Ej: 639.20
+        'saldo': costo_mensual_final                    # se asume que el saldo pendiente es su costo final
     }
 
     # Instanciamos la clase Folio
@@ -94,7 +113,7 @@ def account_details(request):
         context={
             "detalles_cuenta": detalles_cuenta,
             "tickets": lista_tickets,
-            "info_adicional": info_adicional # Enviamos la información de la Sección 1
+            "info_adicional": info_adicional # Enviamos la información de la Sección 1 con la nueva lógica
         }
     )
 
@@ -146,6 +165,42 @@ def busqueda_avanzada(request):
             return redirect('dashboard')
 
     # Si se intenta acceder por GET, se rebota al dashboard
+    return redirect('dashboard')
+
+# METODO: Controlador para aplicar el descuento a la cuenta
+def aplicar_descuento(request):
+    if request.method == 'POST':
+        # 1. Recuperamos los datos que envía el Modal oculto en el HTML
+        id_cuenta = request.POST.get('id_cuenta', '').strip()
+        descuento = request.POST.get('descuento', '').strip()
+
+        # 2. Validación: Confirmamos que ambos datos existan
+        if not id_cuenta or not descuento:
+            messages.error(request, "Error: Datos incompletos. No se pudo aplicar el descuento.")
+            return redirect('dashboard')
+
+        # 3. Validación de seguridad: Incluimos el '0' como valor permitido
+        if descuento not in ['0', '10', '20', '30']:
+            messages.error(request, "Error de sistema: Porcentaje de descuento no autorizado.")
+            return redirect(f"/account_details/?q={id_cuenta}")
+
+        # 4. Llamada al DAO para ejecutar el UPDATE en PostgreSQL
+        obj_cuenta = Cuenta()
+        exito = obj_cuenta.actualizar_descuento(id_cuenta, descuento)
+
+        # 5. Lógica de alertas según el resultado
+        if exito:
+            if descuento == '0':
+                messages.success(request, f"Se ha retirado el descuento de la cuenta {id_cuenta}. El cobro volvió a la normalidad.")
+            else:
+                messages.success(request, f"¡Éxito! Se ha aplicado un descuento del {descuento}% a la cuenta {id_cuenta}.")
+        else:
+            messages.error(request, "Error interno: Hubo un problema al guardar el descuento en la base de datos.")
+
+        # 6. Redirigimos agregando la bandera silenciosa (&src=update)
+        return redirect(f"/account_details/?q={id_cuenta}&src=update")
+
+    # Si intentan acceder por la URL directamente (GET), los rebotamos
     return redirect('dashboard')
 
 def consulta(request):
