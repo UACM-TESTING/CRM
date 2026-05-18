@@ -1,15 +1,10 @@
 from dashboard.db_connection import DatabaseConnection
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
-<<<<<<< HEAD
-from .models.Cliente import Cliente
-from .models.Folio import Folio
-=======
 from django.contrib import messages  # framework de alertas de Django
 from .models.Cliente import Cliente
 from .models.Folio import Folio
 from .models.Cuenta import Cuenta  
->>>>>>> origin/saul
 
 def dashboard(request):
     return render(request, 'html/dashboard.html')
@@ -37,10 +32,6 @@ def logout(request):
     return redirect('login')
 
 def account_details(request):
-<<<<<<< HEAD
-    
-    
-=======
     # Atrapamos el ID y usamos strip() para quitar espacios accidentales al inicio o final
     id_cuenta_buscada = request.GET.get('q', '').strip()
     
@@ -116,19 +107,13 @@ def account_details(request):
     lista_tickets = obj_folio.getTickets(id_cuenta_buscada)
 
     # Enviamos todo al HTML
->>>>>>> origin/saul
     return render(
         request, 
         "html/account_details.html",
         context={
-<<<<<<< HEAD
-            "tickets": Folio.getTickets(),
-            "cliente":Cliente.getClient()
-=======
             "detalles_cuenta": detalles_cuenta,
             "tickets": lista_tickets,
             "info_adicional": info_adicional # Enviamos la información de la Sección 1 con la nueva lógica
->>>>>>> origin/saul
         }
     )
 
