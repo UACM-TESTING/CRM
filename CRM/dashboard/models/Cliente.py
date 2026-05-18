@@ -8,13 +8,10 @@ class Cliente:
      
      #constructor del Client
      def __init__(self):
-<<<<<<< HEAD
-=======
           super.__init__()
      
      #metodo para consultar en bd el Client
      def getClientByID(self):
->>>>>>> origin/saul
           pass
      
      #metodo para consultar en bd el Client

@@ -7,30 +7,6 @@ from dashboard.db_connection import DatabaseConnection
 class Folio:
      
      #constructor del Ticket
-<<<<<<< HEAD
-     # def __init__(self):
-          # pass
-          
-     #metodo para consultar todos los Tickets
-     # si tienes problemas con la carga de la pagina por problemas
-     #de permisos sobre las tablas de base de datos, usa los comandos
-     #que vienen hasta abajo del script.sql
-     def getTickets():
-        db = DatabaseConnection()
-        db.connect()
-        cursor = db.cursor
-        cursor.execute("SELECT * FROM folio WHERE id_cuenta = '1000000000';")
-        folios = cursor.fetchall()
-        db.close()
-        return folios
-     
-     #metodo para insertar en bd la Switch
-     def addTicket():
-          pass
-     
-     #metodo para inhabilitar Switch en base de datos
-     def deleteTicket():
-=======
      def __init__(self):
           pass
      
@@ -75,7 +51,6 @@ class Folio:
      
      #metodo para inhabilitar Ticket en base de datos
      def deleteTicket(self):
->>>>>>> origin/saul
           pass
      
      #metodo para actualizar el Ticket (se agregó 'self')
