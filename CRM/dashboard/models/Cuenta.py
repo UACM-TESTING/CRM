@@ -139,7 +139,7 @@ class Cuenta:
                cursor = conexion.cursor()
                
                # Consulta parametrizada para evitar inyecciones SQL
-               sql = "UPDATE cuenta SET descuento = %s WHERE id_cuenta = %s"
+               sql = "UPDATE cuenta SET porcentaje_descuento = %s WHERE id_cuenta = %s"
                cursor.execute(sql, (descuento, id_cuenta))
                
                # Obligatorio: Aplicar un commit para que los cambios se guarden físicamente en la BD
