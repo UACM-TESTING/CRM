@@ -17,8 +17,9 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# IGNORAR ARCHIVOS DEL ENTORNO VIRTUAL (Para proteger tu código en la carpeta CRM)
-CRM/lib/
-CRM/bin/
-CRM/include/
-CRM/pyvenv.cfg
+# IGNORAR ARCHIVOS DEL ENTORNO VIRTUAL 
+CRM/CRM/bin/
+CRM/CRM/lib/
+CRM/CRM/lib64/
+CRM/CRM/include/
+CRM/CRM/pyvenv.cfg

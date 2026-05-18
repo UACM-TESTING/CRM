@@ -8,7 +8,11 @@ class WiFiExtemder(NetworkDevice):
      
      #constructor del WiFiExtender
      def __init__(self):
+<<<<<<< HEAD
           pass
+=======
+          super().__init__()
+>>>>>>> origin/saul
      
      #metodo para consultar en bd el WiFiExtender
      def getWiFiExtender(self):

@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2 import OperationalError
 from django.conf import settings
+
 class DatabaseConnection:
 
     def __init__(self):
@@ -17,6 +18,7 @@ class DatabaseConnection:
             port=db['PORT'],
         )
         self.cursor = self.connection.cursor()
+        return self.connection  
 
     def close(self):
         if self.cursor:
