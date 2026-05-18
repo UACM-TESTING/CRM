@@ -21,7 +21,7 @@ class Cuenta:
                sql = """
                     SELECT 
                         c.id_cuenta, c.cuenta_activa, c.fecha_corte, c.telefono_fijo,
-                        c.fecha_activacion, c.fecha_limite, c.descuento,
+                        c.fecha_activacion, c.fecha_limite, c.porcentaje_descuento,
                         cl.nombre_cliente, cl.apellido_paterno, cl.correo_cliente, cl.telefono_celular,
                         p.nombre_plan, p.precio_plan,
                         o.nombre_olt, o.region_olt,

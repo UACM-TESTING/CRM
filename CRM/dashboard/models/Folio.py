@@ -18,7 +18,7 @@ class Folio:
      def getTickets(self, id_cuenta_buscar):
           lista_folios = []
           try:
-               db = db_connection.DatabaseConnection()
+               db = DatabaseConnection()
                conexion = db.connect()
                cursor = conexion.cursor()
                

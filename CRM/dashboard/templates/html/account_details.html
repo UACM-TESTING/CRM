@@ -31,19 +31,6 @@
     </div>
 </nav>
 
-<<<<<<< HEAD
-<!-- antes tenias varios divs estaticos, ahora tienes n divs dinamicos  -->
-    <div class="container mt-4">
-        <div class="d-flex flex-wrap gap-3">
-            {% for dato_personal in cliente%}
-                {% for dato in dato_personal%}
-                    <div class="flex-fill p-3 border rounded bg-light" style="min-width: 200px;">
-                        <i class="bi bi-person-circle me-2 text-primary"></i>
-                        <span class="fw-semibold">{{dato}}</span>
-                    </div>
-                {% endfor%}
-            {% endfor%}
-=======
 <div class="container-fluid px-4 mt-4">
 
     {% if detalles_cuenta %}
@@ -63,34 +50,22 @@
                     </strong>
                 </div>
             </div>
->>>>>>> origin/saul
         </div>
         {% endfor %}
     </div>
-<<<<<<< HEAD
-
-    <script>
-        //aqui para el modificar el DOM
-    </script>
-=======
     {% else %}
     <div class="alert alert-warning text-center shadow-sm mb-4">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <strong>Atención:</strong> No se ha cargado ninguna cuenta. Realice una búsqueda en el Dashboard.
     </div>
     {% endif %}
->>>>>>> origin/saul
 
     <br>
     <div class="accordion shadow-sm" id="accordionDashboard">
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#item1">
-<<<<<<< HEAD
-                    Información
-=======
                     <i class="bi bi-info-circle me-2 text-primary"></i> Sección 1 - Información Adicional
->>>>>>> origin/saul
                 </button>
             </h2>
             <div id="item1" class="accordion-collapse collapse show" data-bs-parent="#accordionDashboard">
@@ -142,35 +117,6 @@
         </div>
         <div class="accordion-item">
             <h2 class="accordion-header">
-<<<<<<< HEAD
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#item2">
-                    Historial de Folios
-                </button>
-            </h2>
-            <div id="item2" class="accordion-collapse collapse" data-bs-parent="#accordionDashboard">
-                <div class="accordion-body">
-                    <table class="table">
-                        <thead style="text-align: center;">
-                            <tr>
-                                <th>Folio</th>
-                                <th>Area Origen</th>
-                                <th>Falla</th>
-                                <th>Falla Especifica</th>
-                                <th>Solucion</th>
-                                <th>Descripción</th>
-                                <th>Empleado</th>
-                                <th>Cuenta</th>
-                                <th>Fecha de Creacion</th>
-                            </tr>
-                            {% for ticket in tickets %}
-                            <tr>
-                                {% for folio in ticket %}
-                                    <td>{{ folio }}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </thead>
-=======
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#item2">
                     <i class="bi bi-clock-history me-2 text-secondary"></i> Sección 2 - Historial de Tickets
@@ -209,15 +155,11 @@
                             </tr>
                             {% endif %}
                         </tbody>
->>>>>>> origin/saul
                     </table>
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-
-=======
 </div>
 
 <div class="modal fade" id="modalDescuento" tabindex="-1" aria-labelledby="modalDescuentoLabel" aria-hidden="true">
@@ -256,5 +198,4 @@
     </div>
   </div>
 </div>
->>>>>>> origin/saul
 {% endblock %}
