@@ -1,10 +1,10 @@
-CREATE DATABASE crm;
-CREATE USER testing WITH PASSWORD '123456';
-ALTER ROLE testing WITH CREATEDB;
-ALTER DATABASE crm OWNER TO testing;
-GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
+-- CREATE DATABASE crm;
+-- CREATE USER testing WITH PASSWORD '123456';
+-- ALTER ROLE testing WITH CREATEDB;
+-- ALTER DATABASE crm OWNER TO testing;
+-- GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
 
-\connect crm
+-- \connect crm testing
 
 -- los numeros de cuenta estan dentro de un rango de [1000000000 - 2147483647] 
 -- secuencia para numeros de cuenta
@@ -261,15 +261,11 @@ INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, 
 ('Soporte Técnico', 'WiFi', 'Cobertura baja', 'Reubicación ONT', 'Mala cobertura WiFi en domicilio', 10000008, 1000000008),
 ('Atención Cliente', 'Consulta', 'Información', 'Información', 'Cliente solicita información de servicios', 10000009, 1000000009);
 
-<<<<<<< HEAD
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;
-=======
-#COMENTARIO
->>>>>>> origin/saul
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;
