@@ -23,7 +23,7 @@ CREATE TABLE plan
     id_plan SMALLSERIAL PRIMARY KEY,
     nombre_plan VARCHAR(30),
     precio_plan NUMERIC(7, 2),
-    descuento NUMERIC(7, 2)
+    monto_descuento NUMERIC(7, 2)
 );
 
 CREATE TABLE olt
@@ -95,7 +95,7 @@ CREATE TABLE cuenta
     fecha_limite DATE,
     telefono_fijo VARCHAR(10) UNIQUE, 
     fecha_activacion DATE DEFAULT CURRENT_DATE,
-    descuento INTEGER DEFAULT 0 -- NUEVO: Porcentaje de descuento aplicado a la cuenta (0, 10, 20, 30)
+    porcentaje_descuento INTEGER DEFAULT 0 -- NUEVO: Porcentaje de descuento aplicado a la cuenta (0, 10, 20, 30)
 );
 
 --TABLA DOMICILIO PARA RELACION 1 A 1
