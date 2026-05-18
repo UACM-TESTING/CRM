@@ -65,6 +65,57 @@ class Cuenta:
                     
           return datos_cuenta
      
+     # METODO: Búsqueda avanzada 
+     def busqueda_avanzada(self, nombre, telefono=None, correo=None):
+          """
+          Busca cuentas que coincidan con el nombre (obligatorio) 
+          y opcionalmente con el teléfono o correo (filtros extra).
+          """
+          resultados = []
+          try:
+               db = db_connection.DatabaseConnection()
+               conexion = db.connect()
+               cursor = conexion.cursor()
+               
+               # Consulta base: Concatenamos nombre y apellido para buscar coincidencias parciales (ILIKE)
+               sql = """
+                   SELECT cu.id_cuenta 
+                   FROM cuenta cu
+                   INNER JOIN cliente cl ON cu.id_cliente = cl.id_cliente
+                   WHERE (cl.nombre_cliente || ' ' || cl.apellido_paterno) ILIKE %s
+               """
+               # El % a los lados permite buscar por ejemplo "Roberto" y encontrar "Roberto Díaz"
+               params = [f"%{nombre}%"]
+
+               # Si se proporcionó teléfono, filtramos por celular o por teléfono fijo
+               if telefono:
+                   sql += " AND (cl.telefono_celular = %s OR cu.telefono_fijo = %s)"
+                   params.extend([telefono, telefono])
+
+               # Si se proporcionó correo, agregamos el filtro
+               if correo:
+                   sql += " AND cl.correo_cliente ILIKE %s"
+                   params.append(f"%{correo}%")
+
+               cursor.execute(sql, tuple(params))
+               filas = cursor.fetchall()
+               
+               # Guardamos los IDs encontrados en la lista de resultados
+               for fila in filas:
+                   resultados.append({
+                       'id_cuenta': fila[0]
+                   })
+
+          except Exception as e:
+               print(f"Error en Cuenta.busqueda_avanzada: {e}")
+          finally:
+               if 'cursor' in locals() and cursor is not None:
+                    cursor.close()
+               if 'conexion' in locals() and conexion is not None:
+                    conexion.close()
+
+          return resultados
+
      def addAccount(self):
           pass
      

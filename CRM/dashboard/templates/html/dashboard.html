@@ -65,24 +65,28 @@
       <div class="modal-body">
         <p class="text-muted small mb-4">Ingresa cualquiera de los siguientes datos para localizar el número de cuenta del cliente.</p>
         
-        <form id="advancedSearchForm">
+        <form id="advancedSearchForm" method="POST" action="{% url 'busqueda_avanzada' %}">
+            {% csrf_token %}
             <div class="mb-3">
                 <label class="form-label small fw-bold text-muted">Nombre Completo</label>
-                <input type="text" class="form-control" placeholder="Ej. Roberto Díaz">
+                <input type="text" name="nombre" class="form-control" placeholder="Ej. Roberto Díaz">
             </div>
             <div class="mb-3">
                 <label class="form-label small fw-bold text-muted">Teléfono (Fijo o Celular)</label>
-                <input type="text" class="form-control" placeholder="Ej. 5581234567">
+                <input type="text" name="telefono" class="form-control" placeholder="Ej. 5581234567">
             </div>
             <div class="mb-3">
                 <label class="form-label small fw-bold text-muted">Correo Electrónico</label>
-                <input type="email" class="form-control" placeholder="Ej. roberto.diaz@email.com">
+                <input type="email" name="correo" class="form-control" placeholder="Ej. roberto.diaz@email.com">
+            </div>
+            
+            <div class="modal-footer bg-light mt-4 mx-n3 mb-n3 px-3 py-2 border-top">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #6f42c1; border-color: #6f42c1;">
+                    <i class="bi bi-search me-1"></i> Buscar Coincidencias
+                </button>
             </div>
         </form>
-      </div>
-      <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" style="background-color: #6f42c1; border-color: #6f42c1;">Buscar Coincidencias</button>
       </div>
     </div>
   </div>
