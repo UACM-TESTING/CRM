@@ -17,7 +17,7 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# IGNORAR ARCHIVOS DEL ENTORNO VIRTUAL (Para proteger tu código en la carpeta CRM)
+# IGNORAR ARCHIVOS DEL ENTORNO VIRTUAL 
 CRM/CRM/bin/
 CRM/CRM/lib/
 CRM/CRM/lib64/
