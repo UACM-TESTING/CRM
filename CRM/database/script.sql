@@ -23,7 +23,7 @@ CREATE TABLE plan
     id_plan SMALLSERIAL PRIMARY KEY,
     nombre_plan VARCHAR(30),
     precio_plan NUMERIC(7, 2),
-    monto_descuento NUMERIC(7, 2)
+    monto_descuento NUMERIC(7, 2) DEFAULT 0
 );
 
 CREATE TABLE olt
@@ -98,7 +98,7 @@ CREATE TABLE cuenta
     porcentaje_descuento INTEGER DEFAULT 0 -- NUEVO: Porcentaje de descuento aplicado a la cuenta (0, 10, 20, 30)
 );
 
---TABLA DOMICILIO PARA RELACION 1 A 1
+-- TABLA DOMICILIO PARA RELACION 1 A 1
 CREATE TABLE domicilio
 (
     id_cuenta INTEGER PRIMARY KEY, -- Actúa como PK y FK al mismo tiempo
@@ -145,17 +145,17 @@ ALTER TABLE domicilio ADD CONSTRAINT FK_DOMICILIO_CUENTA
 FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta) ON DELETE CASCADE;
 
 -- Insert 10 plans
-INSERT INTO plan (nombre_plan, precio_plan, descuento) VALUES
-('Plan Básico', 299.00, 0.00),
-('Plan Estándar', 499.00, 50.00),
-('Plan Premium', 799.00, 100.00),
-('Plan Empresarial', 1299.00, 200.00),
-('Plan Hogar', 399.00, 30.00),
-('Plan Estudiante', 249.00, 0.00),
-('Plan Familiar', 699.00, 80.00),
-('Plan Ultra', 999.00, 150.00),
-('Plan Lite', 199.00, 0.00),
-('Plan Pro', 1499.00, 250.00);
+INSERT INTO plan (nombre_plan, precio_plan) VALUES
+('Plan Básico', 299.00),
+('Plan Estándar', 499.00),
+('Plan Premium', 799.00),
+('Plan Empresarial', 1299.00),
+('Plan Hogar', 399.00),
+('Plan Estudiante', 249.00),
+('Plan Familiar', 699.00),
+('Plan Ultra', 999.00),
+('Plan Lite', 199.00),
+('Plan Pro', 1499.00);
 
 -- Insert 10 OLTs
 INSERT INTO olt (nombre_olt, region_olt) VALUES
