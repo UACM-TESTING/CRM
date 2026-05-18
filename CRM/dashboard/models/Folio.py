@@ -46,8 +46,26 @@ class Folio:
           return lista_folios
      
      #metodo para insertar en bd el Ticket
-     def addTicket(self):
-          pass
+     def addTicket(self, id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion):
+          try:
+               db = DatabaseConnection()
+               conexion = db.connect()
+               cursor = conexion.cursor()
+               sql = """
+                    INSERT INTO folio (id_cuenta, area_origen, falla, falla_especifica, solucion, descripcion)
+                    VALUES (%s, %s, %s, %s, %s, %s);
+               """
+               cursor.execute(sql, (id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion))
+               conexion.commit()
+               return True
+          except Exception as e:
+               print(f"Error en Folio.addTicket: {e}")
+               return False
+          finally:
+               if 'cursor' in locals() and cursor is not None:
+                    cursor.close()
+               if 'conexion' in locals() and conexion is not None:
+                    conexion.close()
      
      #metodo para inhabilitar Ticket en base de datos
      def deleteTicket(self):

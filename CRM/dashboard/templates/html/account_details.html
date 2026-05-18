@@ -5,16 +5,11 @@
 {% block body %}
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #6f42c1;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Servicio al Cliente</a>
+        <a class="navbar-brand" href="/dashboard/">Servicio al Cliente</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard/">Dashboard</a>
-                </li>
-            </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Acciones</a>
@@ -182,14 +177,15 @@
         <button type="button" class="btn btn-sm text-white me-1" id="btnMinimizar" title="Minimizar" style="background:transparent; border:none; font-size:1.1rem; line-height:1;">&#8722;</button>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form method="POST" action="#">
+      <form method="POST" action="{% url 'crear_folio' %}">
         {% csrf_token %}
         <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+          <input type="hidden" name="id_cuenta" value="{{ request.GET.q }}">
 
             <!-- Areas  -->
             <fieldset class="mb-2 border rounded p-2">
               <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Area Origen</legend>
-              <select class="form-select form-select-sm" name="nivel2" required>
+              <select class="form-select form-select-sm" name="area" required>
                 <option value="" disabled selected>Selecciona una opción</option>
                 <option value="soporte">Soporte Tecnico</option>
                 <option value="atencion">Atencion a Clientes</option>
@@ -201,12 +197,12 @@
             <!-- Nivel 1 -->
             <fieldset class="mb-2 border rounded p-2">
               <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Nivel 1: Servicio Reportado</legend>
-              <select class="form-select form-select-sm" name="nivel2" required>
+              <select class="form-select form-select-sm" name="nivel1" required>
                 <option value="" disabled selected>Selecciona una opción</option>
-                <option value="Sin señal">Television</option>
-                <option value="Señal intermitente">Internet</option>
-                <option value="Velocidad baja">Telefonia</option>
-                <option value="Corte total">Otra</option>
+                <option value="sin_senial">Television</option>
+                <option value="intermitente">Internet</option>
+                <option value="telefonia">Telefonia</option>
+                <option value="otra">Otra</option>
               </select>
             </fieldset>
 
@@ -217,9 +213,9 @@
                 <option value="" disabled selected>Selecciona una opción</option>
                 <option value="sin_senial">Sin señal</option>
                 <option value="intermitencias">Señal intermitente</option>
-                <option value="Velocidad baja">Velocidad baja</option>
-                <option value="Corte total">Corte total</option>
-                <option value="Problema con equipo">Problema con equipo</option>
+                <option value="velocidad_baja">Velocidad baja</option>
+                <option value="cfo">Corte total</option>
+                <option value="problema_equipo">Problema con equipo</option>
               </select>
             </fieldset>
 
@@ -248,7 +244,7 @@
         </div>
         <div class="modal-footer bg-light px-3 py-2 border-top">
           <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-sm" style="background-color: #6f42c1; border-color: #6f42c1; color: white;">
+          <button type="submit" name="action" value="crear_folio" class="btn btn-sm" style="background-color: #6f42c1; border-color: #6f42c1; color: white;">
             <i class="bi bi-check2-circle me-1"></i> Confirmar Creación
           </button>
         </div>

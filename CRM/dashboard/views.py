@@ -203,5 +203,31 @@ def aplicar_descuento(request):
     # Si intentan acceder por la URL directamente (GET), los rebotamos
     return redirect('dashboard')
 
+def crear_folio(request):
+    if request.method == 'POST' and request.POST.get('action') == 'crear_folio':
+        id_cuenta   = request.POST.get('id_cuenta', '').strip()
+        area_origen = request.POST.get('area', '').strip()
+        nivel1 = request.POST.get('nivel1', '').strip()
+        nivel2 = request.POST.get('nivel2', '').strip()
+        nivel3 = request.POST.get('nivel3', '').strip()
+        descripcion = request.POST.get('descripcion', '').strip()
+        
+        print(f"Datos recibidos: {id_cuenta}, {area_origen}, {nivel1}, {nivel2}, {nivel3}, {descripcion}")
+
+        if not all([id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion]):
+            messages.error(request, "Error: Todos los campos del folio son obligatorios.")
+            return redirect(f"/account_details/?q={id_cuenta}")
+
+        exito = Folio().addTicket(id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion)
+
+        if exito:
+            messages.success(request, f"Folio creado exitosamente para la cuenta {id_cuenta}.")
+        else:
+            messages.error(request, "Error interno: No se pudo crear el folio.")
+
+        return redirect(f"/account_details/?q={id_cuenta}&src=update")
+
+    return redirect('dashboard')
+
 def consulta(request):
     pass
