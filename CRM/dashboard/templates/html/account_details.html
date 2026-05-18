@@ -162,6 +162,136 @@
     </div>
 </div>
 
+{% if detalles_cuenta %}
+<button type="button" class="btn rounded-pill shadow" data-bs-toggle="modal" data-bs-target="#modalFolio"
+    style="position: fixed; bottom: 2rem; left: 2rem; background-color: #6f42c1; color: white; z-index: 1050; padding: 0.5rem 1.2rem;">
+    <i class="bi bi-ticket-perforated-fill me-1"></i> Nuevo Folio
+</button>
+
+<button type="button" id="btnRestaurar" title="Restaurar formulario"
+    style="display:none; position: fixed; bottom: 2rem; left: 2rem; background-color: #6f42c1; color: white; z-index: 1050; border: none; border-radius: 50px; padding: 0.5rem 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); align-items: center; gap: 0.4rem;">
+    <i class="bi bi-ticket-perforated-fill"></i> Folio en progreso
+</button>
+{% endif %}
+
+<div class="modal fade" id="modalFolio" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #6f42c1; color: white;">
+        <h6 class="modal-title"><i class="bi bi-ticket-perforated-fill me-2"></i>Crear Folio</h6>
+        <button type="button" class="btn btn-sm text-white me-1" id="btnMinimizar" title="Minimizar" style="background:transparent; border:none; font-size:1.1rem; line-height:1;">&#8722;</button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="#">
+        {% csrf_token %}
+        <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+
+            <!-- Areas  -->
+            <fieldset class="mb-2 border rounded p-2">
+              <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Area Origen</legend>
+              <select class="form-select form-select-sm" name="nivel2" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="soporte">Soporte Tecnico</option>
+                <option value="atencion">Atencion a Clientes</option>
+                <option value="ventas">Ventas</option>
+                <option value="cancelaciones">Cancelaciones</option>
+              </select>
+            </fieldset>
+
+            <!-- Nivel 1 -->
+            <fieldset class="mb-2 border rounded p-2">
+              <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Nivel 1: Servicio Reportado</legend>
+              <select class="form-select form-select-sm" name="nivel2" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="Sin señal">Television</option>
+                <option value="Señal intermitente">Internet</option>
+                <option value="Velocidad baja">Telefonia</option>
+                <option value="Corte total">Otra</option>
+              </select>
+            </fieldset>
+
+            <!-- Nivel 2 -->
+            <fieldset class="mb-2 border rounded p-2">
+              <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Nivel 2: Falla Especifica</legend>
+              <select class="form-select form-select-sm" name="nivel2" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="sin_senial">Sin señal</option>
+                <option value="intermitencias">Señal intermitente</option>
+                <option value="Velocidad baja">Velocidad baja</option>
+                <option value="Corte total">Corte total</option>
+                <option value="Problema con equipo">Problema con equipo</option>
+              </select>
+            </fieldset>
+
+            <!-- Nivel 3 -->
+            <fieldset class="border rounded p-2">
+              <legend class="fw-bold float-none w-auto px-2" style="font-size: 0.8rem;">Nivel 3: Solucion</legend>
+              <select class="form-select form-select-sm" name="nivel3" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="solucion">Solucion en linea</option>
+                <option value="visita">Visita tecnica</option>
+                <option value="escalacion">Escalacion a ingenieria</option>
+                <option value="Configuración remota">Configuración remota</option>
+              </select>
+            </fieldset>
+
+          <!-- Descripción -->
+          <fieldset class="mb-1">
+            <legend class="fw-bold" style="font-size: 0.85rem;">Descripción</legend>
+            <textarea class="form-control form-control-sm" name="descripcion" rows="4" maxlength="10000"
+              placeholder="Describe el problema o motivo del folio... (máx. 10,000 caracteres)" required></textarea>
+            <div class="text-end">
+              <small class="text-muted" id="charCount">0 / 10,000</small>
+            </div>
+          </fieldset>
+
+        </div>
+        <div class="modal-footer bg-light px-3 py-2 border-top">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-sm" style="background-color: #6f42c1; border-color: #6f42c1; color: white;">
+            <i class="bi bi-check2-circle me-1"></i> Confirmar Creación
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelector('textarea[name="descripcion"]').addEventListener('input', function () {
+    document.getElementById('charCount').textContent = this.value.length.toLocaleString() + ' / 10,000';
+  });
+
+  const modal      = document.getElementById('modalFolio');
+  const btnMin     = document.getElementById('btnMinimizar');
+  const btnRestore = document.getElementById('btnRestaurar');
+  const btnNuevo   = document.querySelector('[data-bs-target="#modalFolio"]');
+
+  btnMin.addEventListener('click', function () {
+    modal.style.display = 'none';
+    document.querySelector('.modal-backdrop')?.classList.add('d-none');
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    btnNuevo.style.display = 'none';
+    btnRestore.style.display = 'flex';
+  });
+
+  btnRestore.addEventListener('click', function () {
+    btnRestore.style.display = 'none';
+    btnNuevo.style.display = '';
+    document.querySelector('.modal-backdrop')?.classList.remove('d-none');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
+  });
+
+  // prevent Bootstrap from clearing the form on real close
+  modal.addEventListener('hidden.bs.modal', function () {
+    if (btnRestore.style.display === 'flex') return; // minimized, not closed
+    btnNuevo.style.display = '';
+  });
+</script>
+
 <div class="modal fade" id="modalDescuento" tabindex="-1" aria-labelledby="modalDescuentoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content">
