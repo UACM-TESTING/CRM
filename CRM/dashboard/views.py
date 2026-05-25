@@ -1,34 +1,233 @@
 from dashboard.db_connection import DatabaseConnection
 from django.contrib.auth import logout as auth_logout
 from django.shortcuts import render, redirect
+from django.contrib import messages  # framework de alertas de Django
 from .models.Cliente import Cliente
 from .models.Folio import Folio
+from .models.Cuenta import Cuenta  
 
 def dashboard(request):
     return render(request, 'html/dashboard.html')
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        return redirect('dashboard')
+        # Usamos .get() y .strip() para evitar errores si los campos vienen vacíos
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+        
+        # Validación de que los campos no estén vacíos
+        if username and password:
+            messages.success(request, f"Inicio de sesión exitoso. ¡Bienvenido, {username}!")
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Error: Por favor, ingresa un usuario y contraseña válidos.")
+            return render(request, 'html/login.html')
+            
     return render(request, 'html/login.html')
 
 def logout(request):
     auth_logout(request)
+    # Alerta informativa al cerrar sesión
+    messages.info(request, "Has cerrado sesión de forma segura.")
     return redirect('login')
 
 def account_details(request):
+    # Atrapamos el ID y usamos strip() para quitar espacios accidentales al inicio o final
+    id_cuenta_buscada = request.GET.get('q', '').strip()
     
+    # 1. Validación de campo vacío
+    if not id_cuenta_buscada:
+        messages.warning(request, "Por favor, ingresa un número de cuenta para buscar.")
+        return redirect('dashboard')
+        
+    # 2. Validación restrictiva: Exactamente 10 dígitos y solo números 
+    if not id_cuenta_buscada.isdigit() or len(id_cuenta_buscada) != 10:
+        messages.error(request, "Formato inválido: El número de cuenta debe contener exactamente 10 dígitos numéricos.")
+        return redirect('dashboard')
     
+    detalles_cuenta = [] 
+    info_adicional = {} # Diccionario para la Sección 1
+    
+    # Si pasa las validaciones, instanciamos la clase
+    obj_cuenta = Cuenta()
+    cuenta_datos = obj_cuenta.getAccount(id_cuenta_buscada)
+    
+    # 3. Validación de existencia en la Base de Datos
+    if not cuenta_datos:
+        messages.error(request, f"La cuenta '{id_cuenta_buscada}' no se encontró en los registros del sistema.")
+        return redirect('dashboard')
+        
+    # A. Leemos si existe el parámetro 'src' en la URL (si no existe, por defecto viene vacío '')
+    origen = request.GET.get('src', '').strip()
+    
+    # B. CONDICIONAL: Si el origen ES DIFERENTE de 'update', significa que es una búsqueda limpia.
+    # Por lo tanto, lanzamos el mensaje de éxito. 
+    # Si el origen es IGUAL a 'update', este bloque se lo salta y no se duplica la alerta.
+    if origen != 'update':
+        messages.success(request, f"Cuenta {id_cuenta_buscada} localizada exitosamente.")
+    
+    # mapeo original de los datos
+    detalles_cuenta = [
+        {'etiqueta': 'CLIENTE', 'valor': cuenta_datos.get('nombre_completo'), 'icono': 'bi-person-circle', 'color': '#6f42c1'},
+        {'etiqueta': 'CUENTA', 'valor': cuenta_datos.get('id_cuenta'), 'icono': 'bi-person-badge', 'color': '#6f42c1'},
+        {'etiqueta': 'ESTATUS', 'valor': cuenta_datos.get('estatus'), 'icono': 'bi-plug-fill', 'color': '#198754' if cuenta_datos.get('estatus') == 'ACTIVA' else '#dc3545'},
+        {'etiqueta': 'CORREO', 'valor': cuenta_datos.get('correo'), 'icono': 'bi-envelope', 'color': '#6f42c1'},
+        {'etiqueta': 'CELULAR', 'valor': cuenta_datos.get('celular'), 'icono': 'bi-phone', 'color': '#007bff'},
+        {'etiqueta': 'TEL. FIJO', 'valor': cuenta_datos.get('telefono_fijo'), 'icono': 'bi-telephone-fill', 'color': '#007bff'},
+        {'etiqueta': 'PLAN', 'valor': cuenta_datos.get('plan'), 'icono': 'bi-box-seam', 'color': '#fd7e14'},
+        {'etiqueta': 'FECHA ALTA', 'valor': cuenta_datos.get('fecha_activacion'), 'icono': 'bi-calendar-check', 'color': '#6c757d'},
+        {'etiqueta': 'FECHA CORTE', 'valor': cuenta_datos.get('fecha_corte'), 'icono': 'bi-calendar-x', 'color': '#dc3545'},
+        {'etiqueta': 'LÍMITE PAGO', 'valor': cuenta_datos.get('fecha_limite'), 'icono': 'bi-calendar-event', 'color': '#ffc107'},
+        {'etiqueta': 'REGIÓN', 'valor': cuenta_datos.get('region'), 'icono': 'bi-geo-alt-fill', 'color': '#17a2b8'},
+        {'etiqueta': 'NODO / OLT', 'valor': cuenta_datos.get('nodo'), 'icono': 'bi-router', 'color': '#17a2b8'}
+    ]
+    
+    # Lógica financiera para procesar los descuentos
+    precio_base = cuenta_datos.get('precio_plan', 0.0)
+    porcentaje_descuento = cuenta_datos.get('descuento', 0)
+    
+    # Calculamos de cuánto es el ahorro exacto en dinero
+    monto_descuento = precio_base * (porcentaje_descuento / 100.0)
+    
+    # Calculamos el total real que el cliente debe pagar
+    costo_mensual_final = precio_base - monto_descuento
+
+    # Empaquetamos los nuevos datos y la dirección para enviarlos al HTML
+    info_adicional = {
+        'domicilio': cuenta_datos.get('direccion', 'No registrada'),
+        'costo_plan': precio_base,                      # Ej: 799.00
+        'porcentaje_descuento': porcentaje_descuento,   # Ej: 20
+        'monto_descuento': monto_descuento,             # Ej: 159.80
+        'costo_final': costo_mensual_final,             # Ej: 639.20
+        'saldo': costo_mensual_final                    # se asume que el saldo pendiente es su costo final
+    }
+
+    # Instanciamos la clase Folio
+    obj_folio = Folio()
+    lista_tickets = obj_folio.getTickets(id_cuenta_buscada)
+
+    # Enviamos todo al HTML
     return render(
         request, 
         "html/account_details.html",
         context={
-            "tickets": Folio.getTickets(),
-            "cliente":Cliente.getClient()
+            "detalles_cuenta": detalles_cuenta,
+            "tickets": lista_tickets,
+            "info_adicional": info_adicional # Enviamos la información de la Sección 1 con la nueva lógica
         }
     )
+
+# METODO: Controlador de la Búsqueda Avanzada
+def busqueda_avanzada(request):
+    if request.method == 'POST':
+        # 1. Recuperamos los datos del formulario limpiando espacios en blanco
+        nombre = request.POST.get('nombre', '').strip()
+        telefono = request.POST.get('telefono', '').strip()
+        correo = request.POST.get('correo', '').strip()
+
+        # 2. VALIDACIÓN ESTRICTA: Nombre no puede estar vacío
+        if not nombre:
+            messages.error(request, "Error: El campo 'Nombre Completo' es obligatorio para la búsqueda avanzada.")
+            return redirect('dashboard')
+
+        # 3. Llamada al DAO (Modelo)
+        obj_cuenta = Cuenta()
+        # Pasamos None si los campos opcionales vienen vacíos
+        resultados = obj_cuenta.busqueda_avanzada(
+            nombre=nombre,
+            telefono=telefono if telefono else None,
+            correo=correo if correo else None
+        )
+
+        total_encontrados = len(resultados)
+
+        # 4. LÓGICA DE DECISIÓN (Valores Límite: 0, 1, >1)
+        
+        # Caso 0 resultados
+        if total_encontrados == 0:
+            messages.error(request, f"No se encontró ninguna cuenta asociada a '{nombre}' con los filtros proporcionados.")
+            return redirect('dashboard')
+
+        # Caso Exacto (1 resultado)
+        elif total_encontrados == 1:
+            id_encontrado = resultados[0]['id_cuenta']
+            messages.success(request, f"¡Cliente localizado con éxito! Mostrando la cuenta: {id_encontrado}")
+            # Redirección dinámica hacia la cuenta encontrada
+            return redirect(f"/account_details/?q={id_encontrado}")
+
+        # Caso Duplicados (>1 resultado)
+        else:
+            messages.warning(
+                request, 
+                f"Se encontraron {total_encontrados} cuentas que coinciden con '{nombre}'. "
+                f"Por seguridad, ingresa también el Teléfono o Correo para identificar la cuenta exacta."
+            )
+            return redirect('dashboard')
+
+    # Si se intenta acceder por GET, se rebota al dashboard
+    return redirect('dashboard')
+
+# METODO: Controlador para aplicar el descuento a la cuenta
+def aplicar_descuento(request):
+    if request.method == 'POST':
+        # 1. Recuperamos los datos que envía el Modal oculto en el HTML
+        id_cuenta = request.POST.get('id_cuenta', '').strip()
+        descuento = request.POST.get('descuento', '').strip()
+
+        # 2. Validación: Confirmamos que ambos datos existan
+        if not id_cuenta or not descuento:
+            messages.error(request, "Error: Datos incompletos. No se pudo aplicar el descuento.")
+            return redirect('dashboard')
+
+        # 3. Validación de seguridad: Incluimos el '0' como valor permitido
+        if descuento not in ['0', '10', '20', '30']:
+            messages.error(request, "Error de sistema: Porcentaje de descuento no autorizado.")
+            return redirect(f"/account_details/?q={id_cuenta}")
+
+        # 4. Llamada al DAO para ejecutar el UPDATE en PostgreSQL
+        obj_cuenta = Cuenta()
+        exito = obj_cuenta.actualizar_descuento(id_cuenta, descuento)
+
+        # 5. Lógica de alertas según el resultado
+        if exito:
+            if descuento == '0':
+                messages.success(request, f"Se ha retirado el descuento de la cuenta {id_cuenta}. El cobro volvió a la normalidad.")
+            else:
+                messages.success(request, f"¡Éxito! Se ha aplicado un descuento del {descuento}% a la cuenta {id_cuenta}.")
+        else:
+            messages.error(request, "Error interno: Hubo un problema al guardar el descuento en la base de datos.")
+
+        # 6. Redirigimos agregando la bandera silenciosa (&src=update)
+        return redirect(f"/account_details/?q={id_cuenta}&src=update")
+
+    # Si intentan acceder por la URL directamente (GET), los rebotamos
+    return redirect('dashboard')
+
+def crear_folio(request):
+    if request.method == 'POST' and request.POST.get('action') == 'crear_folio':
+        id_cuenta   = request.POST.get('id_cuenta', '').strip()
+        area_origen = request.POST.get('area', '').strip()
+        nivel1 = request.POST.get('nivel1', '').strip()
+        nivel2 = request.POST.get('nivel2', '').strip()
+        nivel3 = request.POST.get('nivel3', '').strip()
+        descripcion = request.POST.get('descripcion', '').strip()
+        
+        print(f"Datos recibidos: {id_cuenta}, {area_origen}, {nivel1}, {nivel2}, {nivel3}, {descripcion}")
+
+        if not all([id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion]):
+            messages.error(request, "Error: Todos los campos del folio son obligatorios.")
+            return redirect(f"/account_details/?q={id_cuenta}")
+
+        exito = Folio().addTicket(id_cuenta, area_origen, nivel1, nivel2, nivel3, descripcion)
+
+        if exito:
+            messages.success(request, f"Folio creado exitosamente para la cuenta {id_cuenta}.")
+        else:
+            messages.error(request, "Error interno: No se pudo crear el folio.")
+
+        return redirect(f"/account_details/?q={id_cuenta}&src=update")
+
+    return redirect('dashboard')
 
 def consulta(request):
     pass

@@ -8,6 +8,10 @@ class Cliente:
      
      #constructor del Client
      def __init__(self):
+          super.__init__()
+     
+     #metodo para consultar en bd el Client
+     def getClientByID(self):
           pass
      
      #metodo para consultar en bd el Client

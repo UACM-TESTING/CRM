@@ -1,10 +1,10 @@
-CREATE DATABASE crm;
-CREATE USER testing WITH PASSWORD '123456';
-ALTER ROLE testing WITH CREATEDB;
-ALTER DATABASE crm OWNER TO testing;
-GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
+-- CREATE DATABASE crm;
+-- CREATE USER testing WITH PASSWORD '123456';
+-- ALTER ROLE testing WITH CREATEDB;
+-- ALTER DATABASE crm OWNER TO testing;
+-- GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
 
-\connect crm
+-- \connect crm testing
 
 -- los numeros de cuenta estan dentro de un rango de [1000000000 - 2147483647] 
 -- secuencia para numeros de cuenta
@@ -23,7 +23,7 @@ CREATE TABLE plan
     id_plan SMALLSERIAL PRIMARY KEY,
     nombre_plan VARCHAR(30),
     precio_plan NUMERIC(7, 2),
-    descuento NUMERIC(7, 2)
+    monto_descuento NUMERIC(7, 2) DEFAULT 0
 );
 
 CREATE TABLE olt
@@ -94,7 +94,22 @@ CREATE TABLE cuenta
     fecha_corte DATE,
     fecha_limite DATE,
     telefono_fijo VARCHAR(10) UNIQUE, 
-    fecha_activacion DATE DEFAULT CURRENT_DATE
+    fecha_activacion DATE DEFAULT CURRENT_DATE,
+    porcentaje_descuento INTEGER DEFAULT 0 -- NUEVO: Porcentaje de descuento aplicado a la cuenta (0, 10, 20, 30)
+);
+
+-- TABLA DOMICILIO PARA RELACION 1 A 1
+CREATE TABLE domicilio
+(
+    id_cuenta INTEGER PRIMARY KEY, -- Actúa como PK y FK al mismo tiempo
+    calle VARCHAR(100) NOT NULL,
+    num_casa VARCHAR(20),
+    colonia VARCHAR(100) NOT NULL,
+    delegacion VARCHAR(100),
+    cp VARCHAR(10) NOT NULL,
+    ciudad VARCHAR(100) NOT NULL,
+    estado VARCHAR(100) NOT NULL,
+    lote VARCHAR(50)
 );
 
 -- el emplado sabe que acceso tiene
@@ -125,18 +140,22 @@ FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 ALTER TABLE equipo ADD CONSTRAINT FK_EQUIPO_CUENTA 
 FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 
+-- el domicilio pertenece a una sola cuenta (1 a 1 estricto)
+ALTER TABLE domicilio ADD CONSTRAINT FK_DOMICILIO_CUENTA
+FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta) ON DELETE CASCADE;
+
 -- Insert 10 plans
-INSERT INTO plan (nombre_plan, precio_plan, descuento) VALUES
-('Plan Básico', 299.00, 0.00),
-('Plan Estándar', 499.00, 50.00),
-('Plan Premium', 799.00, 100.00),
-('Plan Empresarial', 1299.00, 200.00),
-('Plan Hogar', 399.00, 30.00),
-('Plan Estudiante', 249.00, 0.00),
-('Plan Familiar', 699.00, 80.00),
-('Plan Ultra', 999.00, 150.00),
-('Plan Lite', 199.00, 0.00),
-('Plan Pro', 1499.00, 250.00);
+INSERT INTO plan (nombre_plan, precio_plan) VALUES
+('Plan Básico', 299.00),
+('Plan Estándar', 499.00),
+('Plan Premium', 799.00),
+('Plan Empresarial', 1299.00),
+('Plan Hogar', 399.00),
+('Plan Estudiante', 249.00),
+('Plan Familiar', 699.00),
+('Plan Ultra', 999.00),
+('Plan Lite', 199.00),
+('Plan Pro', 1499.00);
 
 -- Insert 10 OLTs
 INSERT INTO olt (nombre_olt, region_olt) VALUES
@@ -203,6 +222,19 @@ INSERT INTO cuenta (id_cliente, id_olt, id_plan, fecha_corte, fecha_limite, tele
 (9, 9, 9, '2024-01-15', '2024-01-20', '5589012345'),
 (10, 10, 10, '2024-01-15', '2024-01-20', '5580123456');
 
+-- Insert 10 domicilios anclados a los IDs exactos de las cuentas generadas
+INSERT INTO domicilio (id_cuenta, calle, num_casa, colonia, delegacion, cp, ciudad, estado, lote) VALUES
+(1000000000, 'Av. Universidad', '1200', 'Del Valle', 'Benito Juárez', '03100', 'CDMX', 'CDMX', 'N/A'),
+(1000000001, 'Calle Ermita', '450', 'San Miguel', 'Iztapalapa', '09830', 'CDMX', 'CDMX', 'Lote 14'),
+(1000000002, 'Av. Insurgentes Sur', '2415', 'San Ángel', 'Álvaro Obregón', '01000', 'CDMX', 'CDMX', 'N/A'),
+(1000000003, 'Calzada de Tlalpan', '3200', 'Espartaco', 'Coyoacán', '04870', 'CDMX', 'CDMX', 'Mz 3'),
+(1000000004, 'Av. Paseo de la Reforma', '115', 'Tabacalera', 'Cuauhtémoc', '06030', 'CDMX', 'CDMX', 'N/A'),
+(1000000005, 'Calle El Cielito', '12', 'El Olivo', 'Tlalpan', '14370', 'CDMX', 'CDMX', 'Lote 5'),
+(1000000006, 'Av. Central', 'Mza 2', 'Valle de Aragón', 'Ecatepec', '55280', 'Ecatepec', 'EdoMex', 'Lote 22'),
+(1000000007, 'Calle Filósofos', '89', 'Tecnológico', 'Monterrey', '64700', 'Monterrey', 'Nuevo León', 'N/A'),
+(1000000008, 'Av. Juárez', '402', 'Centro', 'Guadalajara', '44100', 'Guadalajara', 'Jalisco', 'N/A'),
+(1000000009, 'Avenida Las Torres', '55', 'Buenavista', 'Iztacalco', '08100', 'CDMX', 'CDMX', 'Mz 10');
+
 -- Insert 10 equipos
 INSERT INTO equipo (id_equipo, mac_address, descripcion, id_cuenta) VALUES
 ('ONT-001', '00:11:22:33:44:55', 'ONT', 1000000000),
@@ -229,11 +261,11 @@ INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, 
 ('Soporte Técnico', 'WiFi', 'Cobertura baja', 'Reubicación ONT', 'Mala cobertura WiFi en domicilio', 10000008, 1000000008),
 ('Atención Cliente', 'Consulta', 'Información', 'Información', 'Cliente solicita información de servicios', 10000009, 1000000009);
 
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
-#GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;

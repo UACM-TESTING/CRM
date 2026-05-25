@@ -17,11 +17,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard/">Dashboard</a>
-                </li>
-            </ul>
             <ul class="navbar-nav ms-auto">
                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Acciones</a>
@@ -36,17 +31,60 @@
     </div>
 </nav>
 
-<center>
-    <div class="container mt-4">
-        <img src="{% static 'customer_service.png' %}" alt="Customer Service" class="img-fluid mb-3">
-    </div>
-</center>
+<div class="d-flex flex-column justify-content-center align-items-center" style="height: calc(100vh - 60px); overflow: hidden;">
+    
+    <i class="bi bi-headset mb-4" style="font-size: 12rem; color: #0088ff;"></i>
 
-<div class="container mt-3">
-    <div class="input-group">
-        <input type="text" class="form-control rounded-pill ps-4" id="searchInput" placeholder="Buscar número de cuenta..." style="border: 2px solid #00f0ff; box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff;">
-        <button class="btn btn-primary rounded-pill ms-2" style="background-color: #6f42c1; border-color: #6f42c1;" onclick="handleSearch()">Buscar</button>
+    <div class="w-100 px-3" style="max-width: 600px;">
+        <div class="input-group">
+            <input type="text" class="form-control rounded-pill ps-4" id="searchInput" placeholder="Buscar número de cuenta..." style="border: 2px solid #00f0ff; box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff; z-index: 1;">
+            <button class="btn btn-primary rounded-pill ms-2" style="background-color: #6f42c1; border-color: #6f42c1; z-index: 2;" onclick="handleSearch()">Buscar</button>
+        </div>
+        
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-link text-decoration-none shadow-none" style="color: inherit;" data-bs-toggle="modal" data-bs-target="#modalBusquedaAvanzada">
+                <i class="bi bi-person-lines-fill me-1"></i> ¿No tienes el número de cuenta? <a href="#"> Búsqueda avanzada </a>
+            </button>
+        </div>
     </div>
+
+</div>
+
+<div class="modal fade" id="modalBusquedaAvanzada" tabindex="-1" aria-labelledby="modalBusquedaAvanzadaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #6f42c1; color: white;">
+        <h5 class="modal-title" id="modalBusquedaAvanzadaLabel"><i class="bi bi-search me-2"></i>Localizar Cuenta</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-4">Ingresa cualquiera de los siguientes datos para localizar el número de cuenta del cliente.</p>
+        
+        <form id="advancedSearchForm" method="POST" action="{% url 'busqueda_avanzada' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Nombre Completo</label>
+                <input type="text" name="nombre" class="form-control" placeholder="Ej. Roberto Díaz">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Teléfono (Fijo o Celular)</label>
+                <input type="text" name="telefono" class="form-control" placeholder="Ej. 5581234567">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Correo Electrónico</label>
+                <input type="email" name="correo" class="form-control" placeholder="Ej. roberto.diaz@email.com">
+            </div>
+            
+            <div class="modal-footer bg-light mt-4 mx-n3 mb-n3 px-3 py-2 border-top">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="background-color: #6f42c1; border-color: #6f42c1;">
+                    <i class="bi bi-search me-1"></i> Buscar Coincidencias
+                </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -56,10 +94,8 @@
         document.body.classList.toggle('text-white', toggle.checked);
     });
 
-    // NUEVO: Escuchador de eventos para activar la búsqueda al presionar la tecla "Enter"
     document.getElementById('searchInput').addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
-            // Evita que la página intente recargarse si estuviera en un form
             event.preventDefault(); 
             handleSearch();
         }
@@ -72,5 +108,4 @@
         }
     }
 </script>
-
 {% endblock %}
