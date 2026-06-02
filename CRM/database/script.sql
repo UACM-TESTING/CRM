@@ -4,7 +4,7 @@
 -- ALTER DATABASE crm OWNER TO testing;
 -- GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
 
--- \connect crm
+-- \connect crm testing
 
 -- los numeros de cuenta estan dentro de un rango de [1000000000 - 2147483647] 
 -- secuencia para numeros de cuenta
@@ -23,7 +23,7 @@ CREATE TABLE plan
     id_plan SMALLSERIAL PRIMARY KEY,
     nombre_plan VARCHAR(30),
     precio_plan NUMERIC(7, 2),
-    descuento NUMERIC(7, 2)
+    monto_descuento NUMERIC(7, 2)
 );
 
 CREATE TABLE olt
@@ -94,7 +94,8 @@ CREATE TABLE cuenta
     fecha_corte DATE,
     fecha_limite DATE,
     telefono_fijo VARCHAR(10) UNIQUE, 
-    fecha_activacion DATE DEFAULT CURRENT_DATE
+    fecha_activacion DATE DEFAULT CURRENT_DATE, 
+    porcentaje_descuento INTEGER DEFAULT 0.00
 );
 
 -- tabla nueva para visitas tecnicas, esta tabla se relaciona con el 
