@@ -4,7 +4,7 @@
 -- ALTER DATABASE crm OWNER TO testing;
 -- GRANT ALL PRIVILEGES ON DATABASE crm TO testing;
 
--- \connect crm testing
+-- \connect crm
 
 -- los numeros de cuenta estan dentro de un rango de [1000000000 - 2147483647] 
 -- secuencia para numeros de cuenta
@@ -23,7 +23,7 @@ CREATE TABLE plan
     id_plan SMALLSERIAL PRIMARY KEY,
     nombre_plan VARCHAR(30),
     precio_plan NUMERIC(7, 2),
-    monto_descuento NUMERIC(7, 2) DEFAULT 0
+    descuento NUMERIC(7, 2)
 );
 
 CREATE TABLE olt
@@ -94,22 +94,33 @@ CREATE TABLE cuenta
     fecha_corte DATE,
     fecha_limite DATE,
     telefono_fijo VARCHAR(10) UNIQUE, 
-    fecha_activacion DATE DEFAULT CURRENT_DATE,
-    porcentaje_descuento INTEGER DEFAULT 0 -- NUEVO: Porcentaje de descuento aplicado a la cuenta (0, 10, 20, 30)
+    fecha_activacion DATE DEFAULT CURRENT_DATE
 );
 
--- TABLA DOMICILIO PARA RELACION 1 A 1
-CREATE TABLE domicilio
+-- tabla nueva para visitas tecnicas, esta tabla se relaciona con el 
+-- folio, ya que cada visita tecnica se genera a partir de un folio
+-- Relación uno a uno: una visita pertenece a un folio, y un folio tiene una sola visita
+CREATE TABLE visita
 (
-    id_cuenta INTEGER PRIMARY KEY, -- Actúa como PK y FK al mismo tiempo
-    calle VARCHAR(100) NOT NULL,
-    num_casa VARCHAR(20),
-    colonia VARCHAR(100) NOT NULL,
-    delegacion VARCHAR(100),
-    cp VARCHAR(10) NOT NULL,
-    ciudad VARCHAR(100) NOT NULL,
-    estado VARCHAR(100) NOT NULL,
-    lote VARCHAR(50)
+    -- el id de visita se asigna al momento de programar la visita tecnica, es un numero autoincremental
+    idVisita SERIAL PRIMARY KEY,
+    -- el id del folio se asigna al momento de programar la visita tecnica, se relaciona con el 
+    -- folio que genero la visita, UNIQUE asegura que cada folio tiene una sola visita
+    idFolio INTEGER UNIQUE NOT NULL,
+    -- la fecha de visita se puede programar para una fecha futura, por eso no se asigna un valor por defecto
+    fechaVisita DATE,
+    -- separar fecha y hora para facilitar consultas por rango de fechas o por hora
+    fechaCreacion DATE,
+    -- el turno de visita se asigna al momento de programar la visita, puede ser turno matutino o vespertino
+    turnoVisita VARCHAR(10),
+    -- ID del empleado que genero la visita, se asigna al momento de programar la visita 
+    idEmpleado INTEGER,
+    -- la observaciones de la visita se asigna al momento de programar 
+    -- la visita, puede incluir detalles adicionales sobre la visita tecnica
+    observaciones VARCHAR(2000),
+    -- el estado de la visita se asigna al momento de programar la visita, 
+    -- puede ser programada, en progreso, completada, cancelada, reagendada 
+    estadoVisita VARCHAR(20)  
 );
 
 -- el emplado sabe que acceso tiene
@@ -140,22 +151,26 @@ FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 ALTER TABLE equipo ADD CONSTRAINT FK_EQUIPO_CUENTA 
 FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta);
 
--- el domicilio pertenece a una sola cuenta (1 a 1 estricto)
-ALTER TABLE domicilio ADD CONSTRAINT FK_DOMICILIO_CUENTA
-FOREIGN KEY (id_cuenta) REFERENCES cuenta(id_cuenta) ON DELETE CASCADE;
+-- la visita se relaciona con un folio (relación uno a uno)
+ALTER TABLE visita ADD CONSTRAINT FK_VISITA_FOLIO
+FOREIGN KEY (idFolio) REFERENCES folio(id_folio);
+
+-- la visita sabe que empleado la programó
+ALTER TABLE visita ADD CONSTRAINT FK_VISITA_EMPLEADO
+FOREIGN KEY (idEmpleado) REFERENCES empleado(id_empleado);
 
 -- Insert 10 plans
-INSERT INTO plan (nombre_plan, precio_plan) VALUES
-('Plan Básico', 299.00),
-('Plan Estándar', 499.00),
-('Plan Premium', 799.00),
-('Plan Empresarial', 1299.00),
-('Plan Hogar', 399.00),
-('Plan Estudiante', 249.00),
-('Plan Familiar', 699.00),
-('Plan Ultra', 999.00),
-('Plan Lite', 199.00),
-('Plan Pro', 1499.00);
+INSERT INTO plan (nombre_plan, precio_plan, descuento) VALUES
+('Plan Básico', 299.00, 0.00),
+('Plan Estándar', 499.00, 50.00),
+('Plan Premium', 799.00, 100.00),
+('Plan Empresarial', 1299.00, 200.00),
+('Plan Hogar', 399.00, 30.00),
+('Plan Estudiante', 249.00, 0.00),
+('Plan Familiar', 699.00, 80.00),
+('Plan Ultra', 999.00, 150.00),
+('Plan Lite', 199.00, 0.00),
+('Plan Pro', 1499.00, 250.00);
 
 -- Insert 10 OLTs
 INSERT INTO olt (nombre_olt, region_olt) VALUES
@@ -222,19 +237,6 @@ INSERT INTO cuenta (id_cliente, id_olt, id_plan, fecha_corte, fecha_limite, tele
 (9, 9, 9, '2024-01-15', '2024-01-20', '5589012345'),
 (10, 10, 10, '2024-01-15', '2024-01-20', '5580123456');
 
--- Insert 10 domicilios anclados a los IDs exactos de las cuentas generadas
-INSERT INTO domicilio (id_cuenta, calle, num_casa, colonia, delegacion, cp, ciudad, estado, lote) VALUES
-(1000000000, 'Av. Universidad', '1200', 'Del Valle', 'Benito Juárez', '03100', 'CDMX', 'CDMX', 'N/A'),
-(1000000001, 'Calle Ermita', '450', 'San Miguel', 'Iztapalapa', '09830', 'CDMX', 'CDMX', 'Lote 14'),
-(1000000002, 'Av. Insurgentes Sur', '2415', 'San Ángel', 'Álvaro Obregón', '01000', 'CDMX', 'CDMX', 'N/A'),
-(1000000003, 'Calzada de Tlalpan', '3200', 'Espartaco', 'Coyoacán', '04870', 'CDMX', 'CDMX', 'Mz 3'),
-(1000000004, 'Av. Paseo de la Reforma', '115', 'Tabacalera', 'Cuauhtémoc', '06030', 'CDMX', 'CDMX', 'N/A'),
-(1000000005, 'Calle El Cielito', '12', 'El Olivo', 'Tlalpan', '14370', 'CDMX', 'CDMX', 'Lote 5'),
-(1000000006, 'Av. Central', 'Mza 2', 'Valle de Aragón', 'Ecatepec', '55280', 'Ecatepec', 'EdoMex', 'Lote 22'),
-(1000000007, 'Calle Filósofos', '89', 'Tecnológico', 'Monterrey', '64700', 'Monterrey', 'Nuevo León', 'N/A'),
-(1000000008, 'Av. Juárez', '402', 'Centro', 'Guadalajara', '44100', 'Guadalajara', 'Jalisco', 'N/A'),
-(1000000009, 'Avenida Las Torres', '55', 'Buenavista', 'Iztacalco', '08100', 'CDMX', 'CDMX', 'Mz 10');
-
 -- Insert 10 equipos
 INSERT INTO equipo (id_equipo, mac_address, descripcion, id_cuenta) VALUES
 ('ONT-001', '00:11:22:33:44:55', 'ONT', 1000000000),
@@ -260,12 +262,3 @@ INSERT INTO folio (area_origen, falla, falla_especifica, solucion, descripcion, 
 ('Instalaciones', 'Cambio plan', 'Upgrade', 'Cambio de plan', 'Cliente solicita cambio a plan superior', 10000007, 1000000007),
 ('Soporte Técnico', 'WiFi', 'Cobertura baja', 'Reubicación ONT', 'Mala cobertura WiFi en domicilio', 10000008, 1000000008),
 ('Atención Cliente', 'Consulta', 'Información', 'Información', 'Cliente solicita información de servicios', 10000009, 1000000009);
-
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE empleado TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE acceso TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE olt TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE plan TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE folio TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE cuenta TO testing;
--- GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE equipo TO testing;
